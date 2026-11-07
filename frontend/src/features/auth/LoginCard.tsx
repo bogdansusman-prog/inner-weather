@@ -1,8 +1,12 @@
 import './login-card.css';
 
+type Props = {
+  onCreateAccount: () => void; // ce se intampla la click pe "Create an account"
+};
+
 // Cardul de login. Deocamdata doar interfata:
 // legatura cu backend-ul (autentificarea lui Alin, B3) vine mai tarziu.
-export default function LoginCard() {
+export default function LoginCard({ onCreateAccount }: Props) {
   return (
     <form className="login-card" onSubmit={(e) => e.preventDefault()}>
       <h2 className="login-card__title">Welcome back</h2>
@@ -23,7 +27,7 @@ export default function LoginCard() {
       </button>
 
       <p className="login-card__footer">
-        New here? <a href="#">Create an account</a>
+        New here? <button type="button" className="login-card__link" onClick={onCreateAccount}>Create an account</button>
       </p>
     </form>
   );

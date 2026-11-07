@@ -85,3 +85,39 @@
   text-decoration: none;
 }
 .login-card__footer a:hover { text-decoration: underline; }
+
+
+/* butonul-link din josul cardului */
+.login-card__link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--violet);
+  font: 600 13px var(--font);
+  cursor: pointer;
+}
+.login-card__link:hover { text-decoration: underline; }
+
+/* optiunile de tip de cont */
+.role-option {
+  display: grid;
+  gap: 2px;
+  padding: 14px 16px;
+  border: 1px solid rgba(37, 33, 63, 0.12);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--ink);
+  font: 400 13px var(--font);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) ease, background var(--dur-fast) ease;
+}
+.role-option strong { font-size: 15px; font-weight: 600; }
+.role-option span   { color: var(--ink-soft); }
+.role-option:hover  { border-color: rgba(108, 92, 231, 0.4); }
+.role-option[data-selected='true'] {
+  border-color: var(--violet);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.14);
+}
+.login-card__submit:disabled { opacity: 0.45; cursor: default; transform: none; }

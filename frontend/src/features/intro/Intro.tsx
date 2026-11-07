@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import RegisterCard from '../auth/RegisterCard';
 import Stars from '../../sky/Stars';
 import Clouds from '../../sky/Clouds';
 import Rain from '../../sky/Rain';
@@ -51,6 +52,9 @@ export default function Intro() {
 
   // true in cele 0.6s dintre click pe Begin si inceputul furtunii
   const [leaving, setLeaving] = useState(false);
+
+    // ce card arata ecranul de login: autentificare sau cont nou
+  const [authView, setAuthView] = useState<'login' | 'register'>('login');
 
   // Punctul: il miscam din cod in Actul 3, pe o curba lina
   const dotRef = useRef<HTMLSpanElement>(null);
@@ -201,7 +205,9 @@ export default function Intro() {
       {phase === 'login' && (
         <div className="intro__login">
           <p className="intro__slogan">Every storm passes.</p>
-          <LoginCard />
+          {authView === 'login'
+            ? <LoginCard onCreateAccount={() => setAuthView('register')} />
+            : <RegisterCard onBack={() => setAuthView('login')} />}
         </div>
       )}
 
