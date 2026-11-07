@@ -32,8 +32,14 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(a -> a
-                        .requestMatchers("/api/auth/**", "/error").permitAll()
-                        .anyRequest().authenticated())
+                .requestMatchers(
+                        "/api/auth/**",
+                        "/error",
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html"
+                ).permitAll()
+                .anyRequest().authenticated())
                 .oauth2ResourceServer(o -> o
                         .jwt(j -> j.jwtAuthenticationConverter(jwtAuthenticationConverter())));
         return http.build();
