@@ -6,7 +6,9 @@
   font-family: var(--font);
 }
 
-/* ---------- Straturile de cer ---------- */
+/* =========================================================
+   Cerurile simple (drop, journey, login)
+   ========================================================= */
 .intro__sky {
   position: absolute;
   inset: 0;
@@ -16,16 +18,71 @@
 .intro__sky[data-active='true'] { opacity: 1; }
 
 .intro__sky--drop    { background: #05040f; }
-.intro__sky--waiting { background: var(--sky-night); }
-.intro__sky--storm   { background: var(--sky-stormy); }
 .intro__sky--journey { background: var(--sky-calm); }
 .intro__sky--login   { background: var(--sky-sunrise); }
 
-/* În actul 1, cerul de noapte e deja „acolo”, dar ascuns într-un cerc de mărime 0.
-   După impact, cercul crește și dezvăluie cerul, ca privit prin apă. */
-.intro[data-phase='drop'] .intro__sky--waiting {
-  opacity: 1;
-  transition: none;
+/* =========================================================
+   Lumea: un ecran inalt de 260vh prin care urca camera
+   ========================================================= */
+.intro__world {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 260vh;
+  translate: 0 -160vh;     /* la inceput vedem doar noaptea (partea de jos) */
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-soft);
+}
+
+/* lumea e vizibila de la picatura pana la sfarsitul furtunii */
+.intro[data-phase='drop'] .intro__world,
+.intro[data-phase='waiting'] .intro__world,
+.intro[data-phase='storm'] .intro__world { opacity: 1; }
+
+/* dupa furtuna, lumea ramane sus (pe furtuna) cat timp dispare */
+.intro[data-phase='journey'] .intro__world,
+.intro[data-phase='login'] .intro__world { translate: 0 0; }
+
+.intro__world > section {
+  position: absolute;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+}
+
+.intro__world-storm {
+  top: 0;
+  height: 100vh;
+  background: var(--sky-stormy);
+}
+
+/* stratul de nori: culorile leaga furtuna (sus) de noapte (jos) */
+.intro__world-bank {
+  top: 100vh;
+  height: 60vh;
+  background: linear-gradient(180deg, #6a4b9e 0%, #3b3486 45%, #1c1745 75%, #0e0b26 100%);
+}
+/* lumina difuza din mijlocul norului: senzatia ca esti "in ceata" */
+.intro__world-bank::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(220, 210, 255, 0.35) 50%, transparent 100%);
+}
+
+.intro__world-night {
+  top: 160vh;
+  height: 100vh;
+  background: var(--sky-night);
+}
+
+/* =========================================================
+   Actul 1: cerul de noapte se dezvaluie prin unde
+   ========================================================= */
+.intro[data-phase='drop'] .intro__world { transition: none; }
+
+.intro[data-phase='drop'] .intro__world-night {
   clip-path: circle(0% at 50% 50%);
   animation: reveal 1.6s var(--ease-soft) 0.95s forwards;
 }
@@ -34,14 +91,72 @@
   to { clip-path: circle(80% at 50% 50%); }
 }
 
-/* ---------- Picătura ---------- */
+/* =========================================================
+   Urcarea: o singura miscare de la click pana in furtuna.
+   Aceeasi animatie e pornita de "leaving" si continuata de "storm",
+   deci nu se reia de la zero cand se schimba faza.
+   ========================================================= */
+.intro[data-leaving='true'] .intro__world,
+.intro[data-phase='storm'] .intro__world {
+  animation: ascend 2.4s cubic-bezier(0.55, 0, 0.25, 1) forwards;
+}
+
+@keyframes ascend {
+  from { translate: 0 -160vh; }  /* noaptea */
+  to   { translate: 0 0; }       /* furtuna */
+}
+
+/* Parallax in furtuna: norii departati se misca mai putin decat lumea */
+.intro[data-leaving='true'] .intro__world-storm .clouds__layer--far,
+.intro[data-phase='storm'] .intro__world-storm .clouds__layer--far {
+  animation: par-far 2.4s cubic-bezier(0.55, 0, 0.25, 1) forwards;
+}
+@keyframes par-far {
+  from { translate: 0 50vh; }
+  to   { translate: 0 0; }
+}
+
+.intro[data-leaving='true'] .intro__world-storm .clouds__layer--mid,
+.intro[data-phase='storm'] .intro__world-storm .clouds__layer--mid {
+  animation: par-mid 2.4s cubic-bezier(0.55, 0, 0.25, 1) forwards;
+}
+@keyframes par-mid {
+  from { translate: 0 25vh; }
+  to   { translate: 0 0; }
+}
+
+/* norii apropiati din furtuna trec pe langa noi foarte repede.
+   In rest stau ascunsi deasupra lumii, ca sa nu acopere noaptea */
+.intro__world-storm .clouds__layer--near { translate: 0 -200vh; }
+.intro[data-leaving='true'] .intro__world-storm .clouds__layer--near,
+.intro[data-phase='storm'] .intro__world-storm .clouds__layer--near {
+  animation: par-near 2.4s cubic-bezier(0.55, 0, 0.25, 1) forwards;
+}
+@keyframes par-near {
+  from { translate: 0 -60vh; }
+  to   { translate: 0 120vh; }
+}
+
+/* ceata apropiata trece mai repede decat lumea: esti chiar in ea */
+.intro[data-leaving='true'] .intro__world-bank .clouds__layer--near,
+.intro[data-phase='storm'] .intro__world-bank .clouds__layer--near {
+  animation: bank-near 2.4s cubic-bezier(0.55, 0, 0.25, 1) forwards;
+}
+@keyframes bank-near {
+  from { translate: 0 -30vh; }
+  to   { translate: 0 30vh; }
+}
+
+/* =========================================================
+   Picatura / punctul (tu)
+   ========================================================= */
 .intro__drop {
   position: absolute;
   left: 50%;
   top: 50%;
   width: 12px;
   height: 12px;
-  margin: -6px 0 0 -6px;   /* centrată, fără să folosim transform (îl ține animația) */
+  margin: -6px 0 0 -6px;
   border-radius: 50%;
   background: radial-gradient(circle at 35% 35%, #fff, var(--lilac));
   box-shadow:
@@ -49,22 +164,59 @@
     0 0 40px 12px rgba(162, 155, 254, 0.3);
 }
 
+/* Actul 1: cade si se turteste la impact */
 .intro[data-phase='drop'] .intro__drop {
   animation: drop-fall 1s forwards;
 }
-
 @keyframes drop-fall {
-  /* cade accelerând, ca sub gravitație, alungită de viteză */
   0%   { transform: translateY(-55vh) scale(0.7, 1.6); animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45); }
-  /* atinge suprafața */
   88%  { transform: translateY(0) scale(0.7, 1.6); animation-timing-function: ease-out; }
-  /* se turtește la impact */
   94%  { transform: scale(1.8, 0.5); }
-  /* revine rotundă: acum e punctul luminos */
   100% { transform: scale(1); }
 }
 
-/* ---------- Undele ---------- */
+/* Asteptarea: respira impreuna cu butonul */
+.intro[data-phase='waiting'] .intro__drop {
+  animation: dot-pulse 4s ease-in-out 0.8s infinite;
+}
+@keyframes dot-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 12px 4px rgba(162, 155, 254, 0.6), 0 0 40px 12px rgba(162, 155, 254, 0.25);
+  }
+  50% {
+    transform: scale(1.35);
+    box-shadow: 0 0 18px 6px rgba(162, 155, 254, 0.9), 0 0 70px 22px rgba(162, 155, 254, 0.4);
+  }
+}
+
+/* Dupa click: se strange, apoi se aprinde ca o lansare */
+.intro[data-leaving='true'] .intro__drop {
+  animation: dot-charge 0.6s var(--ease-soft) forwards;
+}
+@keyframes dot-charge {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(0.7); }
+  70%  {
+    transform: scale(1.8);
+    box-shadow: 0 0 24px 8px rgba(255, 255, 255, 0.9), 0 0 90px 30px rgba(162, 155, 254, 0.6);
+  }
+  100% { transform: scale(1.2); }
+}
+
+/* In timpul urcarii: usor alungit de viteza, apoi revine */
+.intro[data-phase='storm'] .intro__drop {
+  animation: dot-fly 1.8s ease-in-out forwards;
+}
+@keyframes dot-fly {
+  0%   { transform: scale(1.2); }
+  40%  { transform: scale(0.8, 1.5); }
+  100% { transform: scale(1); }
+}
+
+/* =========================================================
+   Undele (Actul 1)
+   ========================================================= */
 .intro__ripple {
   position: absolute;
   left: 50%;
@@ -87,12 +239,14 @@
   100% { width: 160vmax; height: 160vmax; opacity: 0; }
 }
 
-/* ---------- Titlul ---------- */
+/* =========================================================
+   Titlul (sta in noapte si coboara odata cu ea)
+   ========================================================= */
 .intro__brand {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: calc(50% + 48px);   /* deasupra punctului */
+  bottom: calc(50% + 48px);
   padding: 0 16px;
   text-align: center;
 }
@@ -113,18 +267,19 @@
   opacity: 0;
   animation: rise 1s var(--ease-soft) 1.5s forwards;
 }
-
 @keyframes rise {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: none; }
 }
 
-/* ---------- Butonul Begin ---------- */
+/* =========================================================
+   Butonul Begin
+   ========================================================= */
 .intro__begin {
   position: absolute;
   left: 50%;
-  top: calc(50% + 48px);    /* sub punct */
-  translate: -50% 0;        /* centrat; transform ramane liber pentru hover si click */
+  top: calc(50% + 48px);
+  translate: -50% 0;
   padding: 14px 40px;
   border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: var(--radius-pill);
@@ -137,7 +292,6 @@
     background var(--dur-fast) ease,
     transform var(--dur-fast) var(--ease-soft),
     opacity 0.4s var(--ease-soft);
-  /* apare incet, apoi respira la infinit, in acelasi ritm cu punctul */
   animation:
     fade-in 0.8s var(--ease-soft) both,
     breathe 4s ease-in-out 0.8s infinite;
@@ -151,7 +305,6 @@
   from { opacity: 0; }
 }
 
-/* inspira (50%) si expira: lumina din jurul butonului creste si scade */
 @keyframes breathe {
   0%, 100% {
     border-color: rgba(255, 255, 255, 0.35);
@@ -163,59 +316,15 @@
   }
 }
 
-/* ---------- Punctul respira impreuna cu butonul ---------- */
-.intro[data-phase='waiting'] .intro__drop {
-  animation: dot-pulse 4s ease-in-out 0.8s infinite;
-}
-
-@keyframes dot-pulse {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 0 12px 4px rgba(162, 155, 254, 0.6), 0 0 40px 12px rgba(162, 155, 254, 0.25);
-  }
-  50% {
-    transform: scale(1.35);
-    box-shadow: 0 0 18px 6px rgba(162, 155, 254, 0.9), 0 0 70px 22px rgba(162, 155, 254, 0.4);
-  }
-}
-
-/* ---------- Plecarea: cele 0.6s dupa click ---------- */
-.intro__brand {
-  transition:
-    opacity 0.5s var(--ease-soft),
-    transform 0.5s var(--ease-soft);
-}
-
-.intro[data-leaving='true'] .intro__brand {
-  opacity: 0;
-  transform: translateY(-24px);
-}
-
 .intro[data-leaving='true'] .intro__begin {
   animation: none;
   opacity: 0;
   transform: scale(0.9);
 }
 
-/* punctul se strange o clipa, apoi explodeaza in lumina */
-.intro[data-leaving='true'] .intro__drop {
-  animation: dot-charge 0.6s var(--ease-soft) forwards;
-}
-
-@keyframes dot-charge {
-  0%   { transform: scale(1); }
-  35%  { transform: scale(0.7); }
-  100% {
-    transform: scale(3);
-    box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.9), 0 0 120px 40px rgba(162, 155, 254, 0.6);
-  }
-}
-
-@keyframes fade-in {
-  from { opacity: 0; }
-}
-
-/* ---------- Actele încă neconstruite ---------- */
+/* =========================================================
+   Actele inca neconstruite, Skip, panoul de test
+   ========================================================= */
 .intro__act {
   position: absolute;
   inset: 0;
@@ -228,7 +337,6 @@
   opacity: 0.75;
 }
 
-/* ---------- Skip ---------- */
 .intro__skip {
   position: absolute;
   top: 20px;
@@ -243,7 +351,6 @@
   cursor: pointer;
 }
 
-/* ---------- Panoul de test ---------- */
 .intro__dev {
   position: absolute;
   bottom: 16px;
@@ -266,10 +373,14 @@
 }
 .intro__dev button[data-active='true'] { background: var(--violet); }
 
-/* ---------- Fără animații pentru cine le-a oprit din sistem ---------- */
+/* =========================================================
+   Fara animatii pentru cine le-a oprit din sistem
+   ========================================================= */
 @media (prefers-reduced-motion: reduce) {
   .intro *,
-  .intro__sky { animation: none !important; transition: none !important; }
-  .intro[data-phase='drop'] .intro__sky--waiting { clip-path: none; }
+  .intro__sky,
+  .intro__world { animation: none !important; transition: none !important; }
+  .intro[data-phase='drop'] .intro__world-night { clip-path: none; }
   .intro[data-phase='drop'] .intro__brand { opacity: 1; }
+  .intro[data-phase='storm'] .intro__world { translate: 0 0; }
 }
