@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
+import Stars from '../../sky/Stars';
 import './intro.css';
 
-// Actele intro-ului, în ordine
 type Phase = 'drop' | 'waiting' | 'storm' | 'journey' | 'login';
 const ORDER: Phase[] = ['drop', 'waiting', 'storm', 'journey', 'login'];
 
-// Cat sta fiecare act inainte sa treaca singur la urmatorul (in milisecunde).
-// null = nu trece singur, asteapta o actiune (click pe Begin / login).
 const DURATION: Record<Phase, number | null> = {
   drop: 2500,
   waiting: null,
@@ -15,10 +13,9 @@ const DURATION: Record<Phase, number | null> = {
   login: null,
 };
 
-// Numele afisate deocamdata pe ecran, ca sa vezi in ce act esti
 const LABEL: Record<Phase, string> = {
-  drop: 'Act 1 · Picatura',
-  waiting: 'Act 1 · Asteapta click',
+  drop: 'Act 1 · Picătura',
+  waiting: 'Act 1 · Așteaptă click',
   storm: 'Act 2 · Furtuna',
   journey: 'Act 3 · Trecerea',
   login: 'Act 4 · Login',
@@ -28,7 +25,19 @@ export default function Intro() {
   const [phase, setPhase] = useState<Phase>('drop');
   const [autoPlay, setAutoPlay] = useState(true);
 
-  // Cand se schimba actul, porneste un cronometru spre actul urmator
+    // true in cele 0.6s dintre click pe Begin si inceputul furtunii
+  const [leaving, setLeaving] = useState(false);
+
+  // Dupa click: lasam animatia de "plecare" sa se termine, apoi pornim furtuna
+  useEffect(() => {
+    if (!leaving) return;
+    const timer = setTimeout(() => {
+      setLeaving(false);
+      setPhase('storm');
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [leaving]);
+
   useEffect(() => {
     const ms = DURATION[phase];
     if (ms === null || !autoPlay) return;
@@ -38,26 +47,48 @@ export default function Intro() {
       if (next) setPhase(next);
     }, ms);
 
-    // Daca actul se schimba inainte sa expire, oprim cronometrul vechi
     return () => clearTimeout(timer);
   }, [phase, autoPlay]);
 
+  const showBrand = phase === 'drop' || phase === 'waiting';
+
   return (
-    <div className="intro">
-      {/* Cate un strat de cer pentru fiecare act; doar cel activ e vizibil */}
+    // data-phase îi spune CSS-ului în ce act suntem
+    <div className="intro" data-phase={phase} data-leaving= {leaving}>
       {ORDER.map((p) => (
-        <div key={p} className={`intro__sky intro__sky--${p}`} data-active={p === phase} />
+        <div key={p} className={`intro__sky intro__sky--${p}`} data-active={p === phase}>
+          {p === 'waiting' && <Stars />}
+        </div>
       ))}
 
-      <div className="intro__stage">
-        <p className="intro__act">{LABEL[phase]}</p>
+      {/* Undele apar doar în momentul impactului */}
+      {phase === 'drop' && (
+        <>
+          <span className="intro__ripple intro__ripple--1" />
+          <span className="intro__ripple intro__ripple--2" />
+          <span className="intro__ripple intro__ripple--3" />
+        </>
+      )}
+
+      {/* Picătura (devine punctul luminos) și titlul */}
+      {showBrand && (
+        <>
+          <span className="intro__drop" />
+          <div className="intro__brand">
+            <h1>Inner Weather</h1>
+            <p>Your mood isn't good or bad. It's weather.</p>
+          </div>
+        </>
+      )}
 
         {phase === 'waiting' && (
-          <button className="intro__begin" onClick={() => setPhase('storm')}>
-            Begin
-          </button>
-        )}
-      </div>
+        <button className="intro__begin" onClick={() => setLeaving(true)} disabled={leaving} autoFocus>
+          Begin
+        </button>
+      )}
+
+      {/* Actele încă neconstruite își arată doar numele */}
+      {!showBrand && <p className="intro__act">{LABEL[phase]}</p>}
 
       {phase !== 'login' && (
         <button className="intro__skip" onClick={() => setPhase('login')}>
@@ -65,7 +96,6 @@ export default function Intro() {
         </button>
       )}
 
-      {/* Panou de test, apare doar în dezvoltare (npm run dev), nu in aplicatia finala */}
       {import.meta.env.DEV && (
         <div className="intro__dev">
           {ORDER.map((p) => (

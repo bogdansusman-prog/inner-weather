@@ -1,4 +1,8 @@
 :root {
+      color-scheme: dark; /* pagina e deja 
+      intunecata, browserul nu trebuie sa o 
+      mai intunece */
+
   /* Font */
   --font: 'Poppins', system-ui, sans-serif;
 

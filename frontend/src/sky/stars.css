@@ -1,0 +1,20 @@
+.stars {
+  position: absolute;
+  inset: 0;
+}
+
+.stars__star {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  animation: twinkle ease-in-out infinite alternate;
+}
+
+@keyframes twinkle {
+  from { opacity: 0.15; transform: scale(0.8); }
+  to   { opacity: 0.95; transform: scale(1.15); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stars__star { animation: none; opacity: 0.6; }
+}
