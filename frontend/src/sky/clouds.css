@@ -5,10 +5,13 @@
   pointer-events: none;
 }
 
+.clouds__layer { will-change: translate; } /* straturile se misca: pregatite pentru animatie */
+
 .clouds__cloud {
   position: absolute;
   height: auto;
   animation: drift ease-in-out infinite alternate;
+  will-change: transform;
 }
 
 /* norii aluneca usor stanga-dreapta; cei apropiati mai repede */

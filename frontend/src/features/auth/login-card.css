@@ -1,0 +1,87 @@
+/* Card de sticla mata peste cer */
+.login-card {
+  width: min(400px, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 32px 28px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.62);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 24px 60px rgba(37, 33, 63, 0.14);
+  color: var(--ink);
+  font-family: var(--font);
+}
+
+.login-card__title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.login-card__subtitle {
+  margin: -8px 0 6px;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+
+.login-card__field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr); /* campul se strange pe ecrane inguste */
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.login-card__field input {
+  width: 100%;
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid rgba(37, 33, 63, 0.12);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--ink);
+  font: 400 15px var(--font);
+  outline: none;
+  transition:
+    border-color var(--dur-fast) ease,
+    box-shadow var(--dur-fast) ease,
+    background var(--dur-fast) ease;
+}
+.login-card__field input::placeholder { color: #9a96b2; }
+.login-card__field input:focus {
+  border-color: var(--violet);
+  background: #fff;
+  box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.14);
+}
+
+.login-card__submit {
+  margin-top: 6px;
+  padding: 14px;
+  border: 0;
+  border-radius: 12px;
+  background: #2b2468; /* indigo inchis: sigur pe el, fara sa strige */
+  color: #fff;
+  font: 600 15px var(--font);
+  cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-soft), background var(--dur-fast) ease;
+}
+.login-card__submit:hover  { background: #3b3486; transform: translateY(-1px); }
+.login-card__submit:active { transform: scale(0.98); }
+.login-card__submit:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
+
+.login-card__footer {
+  margin: 2px 0 0;
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.login-card__footer a {
+  color: var(--violet);
+  font-weight: 600;
+  text-decoration: none;
+}
+.login-card__footer a:hover { text-decoration: underline; }
