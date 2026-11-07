@@ -24,7 +24,7 @@ const LAYERS: Record<Layer, Cloud[]> = {
 };
 
 type Props = {
-  tone?: 'storm' | 'calm'; // culoarea norilor
+  tone?: 'storm' | 'calm' | 'fog'; // culoarea norilor
 };
 
 export default function Clouds({ tone = 'storm' }: Props) {

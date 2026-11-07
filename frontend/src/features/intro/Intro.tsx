@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Stars from '../../sky/Stars';
 import Clouds from '../../sky/Clouds';
+import Rain from '../../sky/Rain';
 import './intro.css';
 
 // Actele intro-ului, in ordine
@@ -12,7 +13,7 @@ const ORDER: Phase[] = ['drop', 'waiting', 'storm', 'journey', 'login'];
 const DURATION: Record<Phase, number | null> = {
   drop: 2500,
   waiting: null,
-  storm: 2600,
+  storm: 3400,
   journey: 2400,
   login: null,
 };
@@ -97,6 +98,19 @@ export default function Intro() {
           )}
         </section>
       </div>
+
+      {/* Fulgerul: lumina pe tot cerul + trasnetul */}
+      {phase === 'storm' && (
+        <>
+          <span className="intro__lightning" />
+          <svg className="intro__bolt" viewBox="0 0 200 350" aria-hidden="true">
+            <polyline points="120,0 95,90 130,95 85,210 120,215 70,350" />
+          </svg>
+        </>
+      )}
+
+      {/* Ploaia incepe in furtuna si se opreste in trecere */}
+      {(phase === 'storm' || phase === 'journey') && <Rain className="intro__rain" />}
 
       {/* Undele apar doar in momentul impactului */}
       {phase === 'drop' && (
