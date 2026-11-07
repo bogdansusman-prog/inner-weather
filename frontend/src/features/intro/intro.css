@@ -1,0 +1,91 @@
+.intro {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  color: var(--on-sky);
+  font-family: var(--font);
+}
+
+/* Straturile de cer: stau unul peste altul si se schimba lin prin opacitate */
+.intro__sky {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-soft);
+}
+.intro__sky[data-active='true'] { opacity: 1; }
+
+.intro__sky--drop    { background: #05040f; }
+.intro__sky--waiting { background: var(--sky-night); }
+.intro__sky--storm   { background: var(--sky-stormy); }
+.intro__sky--journey { background: var(--sky-calm); }
+.intro__sky--login   { background: var(--sky-sunrise); }
+
+.intro__stage {
+  position: relative;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 24px;
+  text-align: center;
+}
+
+.intro__act {
+  margin: 0;
+  font-size: 14px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.intro__begin {
+  padding: 14px 40px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--on-sky);
+  font: 500 16px var(--font);
+  cursor: pointer;
+}
+
+.intro__skip {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--on-sky);
+  font: 400 13px var(--font);
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+/* Panoul de test */
+.intro__dev {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.5);
+  font: 12px var(--font);
+}
+.intro__dev button {
+  padding: 4px 8px;
+  border: 0;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  cursor: pointer;
+}
+.intro__dev button[data-active='true'] { background: var(--violet); }
+
+@media (prefers-reduced-motion: reduce) {
+  .intro__sky { transition: none; }
+}

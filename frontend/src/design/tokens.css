@@ -1,0 +1,36 @@
+:root {
+  /* Font */
+  --font: 'Poppins', system-ui, sans-serif;
+
+  /* Text */
+  --ink: #25213f;        /* text închis, pe fundal deschis */
+  --ink-soft: #6b6785;   /* text secundar */
+  --on-sky: #ffffff;     /* text peste cer */
+
+  /* Accente */
+  --violet: #6c5ce7;
+  --lilac: #a29bfe;
+  --rose: #e8578a;
+  --peach: #ffb38a;
+  --gold: #ffc857;
+  --mint: #3dc1a3;
+
+  /* Cerurile: cate un gradient pentru fiecare vreme */
+  --sky-sunrise: linear-gradient(180deg, #0e0b26 0%, #2b2468 35%, #6a4b9e 60%, #e784a6 82%, #ffc08a 100%);
+  --sky-sunny:   linear-gradient(180deg, #6fb8ee 0%, #b9a8f2 55%, #ffd0b0 100%);
+  --sky-calm:    linear-gradient(180deg, #7dd1c0 0%, #a7c7f0 60%, #f3eaff 100%);
+  --sky-foggy:   linear-gradient(180deg, #8fa3bf 0%, #b9c3d6 60%, #e8ecf3 100%);
+  --sky-stormy:  linear-gradient(180deg, #14112e 0%, #3b3486 60%, #6a4b9e 100%);
+  --sky-night:   linear-gradient(180deg, #0e0b26 0%, #1c1745 60%, #2b2468 100%);
+
+  /* Forme */
+  --radius-sm: 12px;
+  --radius-md: 22px;
+  --radius-pill: 999px;
+
+  /* Miscare: totul lent si lin */
+  --dur-fast: 200ms;
+  --dur-base: 400ms;
+  --dur-slow: 1200ms;
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
