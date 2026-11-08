@@ -121,3 +121,14 @@
   box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.14);
 }
 .login-card__submit:disabled { opacity: 0.45; cursor: default; transform: none; }
+
+
+/* mesajul de eroare de sub campuri */
+.login-card__error {
+  margin: -2px 0 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(232, 87, 138, 0.1);
+  color: #b4235a;
+  font-size: 13px;
+}

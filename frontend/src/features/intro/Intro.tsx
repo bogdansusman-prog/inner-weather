@@ -8,7 +8,8 @@ import { journeyKeyframes } from './journeyPath';
 import './intro.css';
 
 // Actele intro-ului, in ordine
-type Phase = 'drop' | 'waiting' | 'storm' | 'journey' | 'login';
+// 'enter' = trecerea de dupa login spre aplicatie (nu face parte din secventa automata)
+type Phase = 'drop' | 'waiting' | 'storm' | 'journey' | 'login' | 'enter';
 const ORDER: Phase[] = ['drop', 'waiting', 'storm', 'journey', 'login'];
 
 // Cat sta fiecare act inainte sa treaca singur la urmatorul (ms).
@@ -22,7 +23,11 @@ const DURATION: Record<Phase, number | null> = {
   storm: 2800,
   journey: JOURNEY_MS,
   login: null,
+  enter: null,
 };
+
+// Cat dureaza trecerea de dupa login; trebuie sa fie aceeasi cu cea din intro.css (1.4s)
+const ENTER_MS = 1400;
 
 // Culorile curcubeului, de la exterior spre interior
 const RAINBOW = ['#f78fb3', '#ffb38a', '#ffc857', '#7ddcc0', '#7fd1f5', '#a29bfe'];
@@ -47,13 +52,17 @@ function startPhase(): Phase {
   return 'drop';
 }
 
-export default function Intro() {
+type Props = {
+  onLoggedIn: () => void; // ce se intampla dupa un login reusit
+};
+
+export default function Intro({ onLoggedIn }: Props) {
   const [phase, setPhase] = useState<Phase>(startPhase);
 
   // true in cele 0.6s dintre click pe Begin si inceputul furtunii
   const [leaving, setLeaving] = useState(false);
 
-    // ce card arata ecranul de login: autentificare sau cont nou
+  // ce card arata ecranul de login: autentificare sau cont nou
   const [authView, setAuthView] = useState<'login' | 'register'>('login');
 
   // Punctul: il miscam din cod in Actul 3, pe o curba lina
@@ -98,6 +107,22 @@ export default function Intro() {
     return () => animation.cancel();
   }, [phase]);
 
+  // Dupa login: lasam trecerea sa se termine, apoi intram in aplicatie
+  useEffect(() => {
+    if (phase !== 'enter') return;
+    const timer = setTimeout(onLoggedIn, ENTER_MS);
+    return () => clearTimeout(timer);
+  }, [phase, onLoggedIn]);
+
+  // Login reusit: in loc sa sarim direct in aplicatie, camera mai urca o data
+  function handleLoggedIn() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      onLoggedIn();
+    } else {
+      setPhase('enter');
+    }
+  }
+
   // Am ajuns la login: data viitoare sarim direct aici
   useEffect(() => {
     if (phase !== 'login') return;
@@ -111,10 +136,12 @@ export default function Intro() {
   // Noaptea -> norii -> furtuna
   const inWorld = phase === 'drop' || phase === 'waiting' || phase === 'storm';
   // Cerul care se insenineaza in trecere si ramane senin la login
-  const inDay = phase === 'journey' || phase === 'login';
+  const inDay = phase === 'journey' || phase === 'login' || phase === 'enter';
+  // Cardul de login ramane pe ecran si in trecerea de dupa login, ca sa se poata strange
+  const showAuth = phase === 'login' || phase === 'enter';
 
   return (
-    <div className="intro" data-phase={phase} data-leaving={leaving}>
+    <div className="intro" data-phase={phase} data-leaving={leaving} data-auth={authView}>
       {/* Fundalul negru de la inceput */}
       <div className="intro__sky intro__sky--drop" data-active={phase === 'drop'} />
 
@@ -202,16 +229,16 @@ export default function Intro() {
       <span className="intro__drop" ref={dotRef} />
 
       {/* Actul 4: cardul de login creste din punct */}
-      {phase === 'login' && (
+      {showAuth && (
         <div className="intro__login">
           <p className="intro__slogan">Every storm passes.</p>
           {authView === 'login'
-            ? <LoginCard onCreateAccount={() => setAuthView('register')} />
+            ? <LoginCard onCreateAccount={() => setAuthView('register')} onLoggedIn={handleLoggedIn} />
             : <RegisterCard onBack={() => setAuthView('login')} />}
         </div>
       )}
 
-      {phase !== 'login' && (
+      {!showAuth && (
         <button className="intro__skip" onClick={() => setPhase('login')}>
           Skip
         </button>

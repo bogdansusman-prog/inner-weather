@@ -1,0 +1,23 @@
+/* Fundalul aplicatiei: acelasi cer cu care se termina intro-ul,
+   ca trecerea de la login sa nu aiba nicio taietura */
+.home {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: linear-gradient(180deg, #8fb8e8 0%, #c5d3f0 60%, #f1edf6 100%);
+  font-family: var(--font);
+}
+
+/* continutul apare usor, de jos in sus */
+.home > * {
+  animation: home-in 0.7s var(--ease-soft) both;
+}
+
+@keyframes home-in {
+  from { opacity: 0; transform: translateY(16px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home > * { animation: none; }
+}
