@@ -27,7 +27,7 @@
         <url/>
     </scm>
     <properties>
-        <java.version>27</java.version>
+        <java.version>25</java.version>
     </properties>
     <dependencies>
         <dependency> <!--for swagger-->
@@ -63,10 +63,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webmvc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-database-postgresql</artifactId>
         </dependency>
 
         <dependency>
