@@ -303,9 +303,14 @@
   box-shadow:
     0 0 40px 12px rgba(255, 210, 122, 0.35),
     0 0 120px 40px rgba(255, 200, 120, 0.18);
-  opacity: 0.85;
+  /* starea de baza = login: mai mic si mai stins, ca privirea sa mearga la card */
+  opacity: 0.55;
+  scale: 0.75;
+  transition: opacity 1s ease, scale 1s var(--ease-soft);
 }
-.intro[data-phase='journey'] .intro__sun { animation: j-sun 4s both; }
+.intro[data-phase='journey'] .intro__sun { animation: j-sun 4s both; opacity: 1; scale: 1; }
+.intro[data-phase='login'] .intro__sun   { animation: sun-settle 1.8s ease both; }
+@keyframes sun-settle { from { opacity: 1; scale: 1; } }
 @keyframes j-sun {
   0%, 72%   { translate: 0 45vh; opacity: 0; animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
   98%, 100% { translate: 0 0; opacity: 1; }
@@ -382,7 +387,7 @@
   position: absolute;
   padding: 3px 9px;
   border-radius: var(--radius-pill);
-  background: rgba(37, 33, 63, 0.5);
+  background: rgba(37, 33, 63, 0.45);
   font-size: 10.5px;
   font-weight: 600;
   letter-spacing: 0.2em;
@@ -618,7 +623,7 @@
   translate: -50% 0;
   padding: 14px 40px;
   border: 1px solid rgba(255, 255, 255, 0.35);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-control);
   background: rgba(255, 255, 255, 0.1);
   color: var(--on-sky);
   font: 500 16px var(--font);
@@ -715,6 +720,15 @@
 
 @keyframes card-item {
   from { opacity: 0; transform: translateY(10px); }
+}
+
+/* mesajul de eroare apare imediat (scurt fade), nu la randul lui in animatia de intrare */
+.intro__login .login-card > .login-card__error {
+  animation: error-in 0.25s ease both;
+  animation-delay: 0s;
+}
+@keyframes error-in {
+  from { opacity: 0; transform: translateY(-4px); }
 }
 
 /* =========================================================
