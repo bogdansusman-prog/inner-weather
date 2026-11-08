@@ -137,3 +137,44 @@
   color: var(--danger);
   font-size: 13px;
 }
+
+/* campul de parola cu butonul Show/Hide in dreapta */
+.login-card__password {
+  position: relative;
+}
+.login-card__password input {
+  padding-right: 64px; /* loc pentru buton */
+}
+.login-card__reveal {
+  position: absolute;
+  top: 50%;
+  right: 6px;
+  translate: 0 -50%;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--violet-text);
+  font: 600 12px var(--font);
+  cursor: pointer;
+}
+.login-card__reveal:hover { background: rgba(108, 92, 231, 0.08); }
+.login-card__reveal:focus-visible { outline: 2px solid var(--violet); outline-offset: 1px; }
+
+
+/* "Forgot password?" aliniat la dreapta, sub parola */
+.login-card__forgot {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -6px;
+}
+
+/* mesaj neutru de informare (nu e eroare) */
+.login-card__info {
+  margin: -2px 0 0;
+  padding: 10px 12px;
+  border-radius: var(--radius-control);
+  background: rgba(108, 92, 231, 0.08);
+  color: var(--ink);
+  font-size: 13px;
+}

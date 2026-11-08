@@ -717,13 +717,16 @@
 .intro__login .login-card > :nth-child(4) { animation-delay: 1.06s; }
 .intro__login .login-card > :nth-child(5) { animation-delay: 1.13s; }
 .intro__login .login-card > :nth-child(6) { animation-delay: 1.2s; }
+.intro__login .login-card > :nth-child(7) { animation-delay: 1.27s; }
+.intro__login .login-card > :nth-child(8) { animation-delay: 1.34s; }
 
 @keyframes card-item {
   from { opacity: 0; transform: translateY(10px); }
 }
 
-/* mesajul de eroare apare imediat (scurt fade), nu la randul lui in animatia de intrare */
-.intro__login .login-card > .login-card__error {
+/* mesajele (eroare, info) apar imediat (scurt fade), nu la randul lor in animatia de intrare */
+.intro__login .login-card > .login-card__error,
+.intro__login .login-card > .login-card__info {
   animation: error-in 0.25s ease both;
   animation-delay: 0s;
 }
