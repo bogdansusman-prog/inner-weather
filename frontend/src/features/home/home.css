@@ -5,7 +5,7 @@
   display: grid;
   place-items: center;
   padding: 16px;
-  background: linear-gradient(180deg, #8fb8e8 0%, #c5d3f0 60%, #f1edf6 100%);
+  background: var(--sky-home);
   font-family: var(--font);
 }
 

@@ -13,6 +13,8 @@ export default function LoginCard({ onCreateAccount, onLoggedIn }: Props) {
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [resetInfo, setResetInfo] = useState(false);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault(); // fara asta, browserul ar reincarca pagina
@@ -53,18 +55,42 @@ export default function LoginCard({ onCreateAccount, onLoggedIn }: Props) {
         />
       </label>
 
-      <label className="login-card__field">
-        <span>Password</span>
-        <input
-          type="password"
-          name="password"
-          autoComplete="current-password"
-          placeholder="••••••••"
-          required
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-      </label>
+      <div className="login-card__field">
+        <label htmlFor="password">Password</label>
+        <div className="login-card__password">
+          <input
+            id="password"
+            type={showPassword ? 'text' : 'password'}
+            name="password"
+            autoComplete="current-password"
+            placeholder="••••••••"
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button
+            type="button"
+            className="login-card__reveal"
+            onClick={() => setShowPassword(!showPassword)}
+            aria-pressed={showPassword}
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+          >
+            {showPassword ? 'Hide' : 'Show'}
+          </button>
+        </div>
+      </div>
+
+      <div className="login-card__forgot">
+        <button type="button" className="login-card__link" onClick={() => setResetInfo(true)}>
+          Forgot password?
+        </button>
+      </div>
+
+      {resetInfo && (
+        <p className="login-card__info">
+          Password reset is coming soon. For now, ask us to reset it for you.
+        </p>
+      )}
 
       {error && <p className="login-card__error" role="alert">{error}</p>}
 
