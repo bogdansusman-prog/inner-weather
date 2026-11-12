@@ -10,3 +10,8 @@ app:
   jwt:
     secret: ${JWT_SECRET:dev-only-secret-key-change-in-production-0123456789}
     expiration-minutes: 60
+
+server:
+  error:
+    include-message: always
+    include-stacktrace: never
