@@ -719,6 +719,8 @@
 .intro__login .login-card > :nth-child(6) { animation-delay: 1.2s; }
 .intro__login .login-card > :nth-child(7) { animation-delay: 1.27s; }
 .intro__login .login-card > :nth-child(8) { animation-delay: 1.34s; }
+.intro__login .login-card > :nth-child(9) { animation-delay: 1.41s; }
+.intro__login .login-card > :nth-child(10) { animation-delay: 1.48s; }
 
 @keyframes card-item {
   from { opacity: 0; transform: translateY(10px); }
