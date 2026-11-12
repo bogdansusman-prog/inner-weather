@@ -36,6 +36,13 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    @Column(name = "display_name", nullable = false, length = 80)
+    private String displayName;
+
+    // terapeutul unui client (null pentru ceilalti)
+    @Column(name = "therapist_id")
+    private UUID therapistId;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt = Instant.now();
 }
