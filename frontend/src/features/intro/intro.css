@@ -8,6 +8,7 @@
   position: fixed;
   inset: 0;
   overflow: hidden;
+  overflow: clip; /* nici focusul pe un camp nu are voie sa "deruleze" scena (aparea negru jos) */
   color: var(--on-sky);
   font-family: var(--font);
   background: #05040f;

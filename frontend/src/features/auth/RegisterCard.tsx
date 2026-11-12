@@ -31,6 +31,7 @@ export default function RegisterCard({ onBack, onRegistered }: Props) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [therapistCode, setTherapistCode] = useState('');
   const [licenseNumber, setLicenseNumber] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -39,6 +40,13 @@ export default function RegisterCard({ onBack, onRegistered }: Props) {
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!role) return;
+
+    // verificam in browser, inainte sa trimitem ceva la server
+    if (password !== confirmPassword) {
+      setError("Passwords don't match.");
+      return;
+    }
+
     setError(null);
     setLoading(true);
 
@@ -161,6 +169,19 @@ export default function RegisterCard({ onBack, onRegistered }: Props) {
         />
       </label>
 
+      <label className="login-card__field">
+        <span>Confirm password</span>
+        <input
+          type="password"
+          name="confirmPassword"
+          autoComplete="new-password"
+          placeholder="Type it again"
+          required
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        />
+      </label>
+
       {role === 'client' && (
         <label className="login-card__field">
           <span>Therapist code</span>
@@ -196,7 +217,7 @@ export default function RegisterCard({ onBack, onRegistered }: Props) {
       </button>
 
       <p className="login-card__footer">
-        <button type="button" className="login-card__link" onClick={() => setStep('role')}>
+        <button type="button" className="login-card__link" onClick={() => { setError(null); setStep('role'); }}>
           ← Back
         </button>
       </p>
