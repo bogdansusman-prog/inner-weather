@@ -1,0 +1,98 @@
+/* Scheletul aplicatiei de dupa login: pagini intregi, una sub alta.
+   Nu derulam pagina: mutam toata banda cu cate un ecran (vezi usePageNav.ts),
+   ca sa putem alege noi cat dureaza trecerea. */
+.shell {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  overflow: clip; /* nici focusul nu are voie sa deruleze scena */
+  background: var(--sky-home);
+  color: var(--ink);
+  font-family: var(--font);
+  color-scheme: light;
+}
+
+/* banda cu paginile; durata vine din Shell.tsx (PAGE_MS) */
+.shell__track {
+  transition-property: translate;
+  transition-timing-function: cubic-bezier(0.65, 0, 0.35, 1); /* porneste lin, se opreste lin */
+  will-change: translate;
+}
+
+.shell__page {
+  height: 100dvh;
+  overflow-y: auto; /* o pagina mai inalta decat ecranul se deruleaza in ea */
+  display: grid;
+  place-items: center;
+  padding: 72px 24px 24px;
+}
+
+/* titlu provizoriu, pana cand fiecare pagina are continutul ei */
+.shell__placeholder {
+  margin: 0;
+  font-size: clamp(32px, 6vw, 56px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  opacity: 0.85;
+}
+
+/* "capitolele": lista din dreapta, mereu vizibila */
+.shell__chapters {
+  position: fixed;
+  top: 50%;
+  right: 20px;
+  translate: 0 -50%;
+  z-index: 2;
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: var(--radius-card);
+  background: rgba(255, 255, 255, 0.55);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.shell__chapter {
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: none;
+  color: var(--ink-soft);
+  font: 500 14px var(--font);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
+}
+.shell__chapter:hover { background: rgba(255, 255, 255, 0.7); color: var(--ink); }
+.shell__chapter:focus-visible { outline: 2px solid var(--violet); outline-offset: 1px; }
+
+/* capitolul paginii pe care esti acum */
+.shell__chapter[aria-current='true'] {
+  background: var(--action);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* pe telefon: capitolele devin o bara jos, la deget */
+@media (max-width: 640px) {
+  .shell__chapters {
+    top: auto;
+    right: 12px;
+    bottom: 12px;
+    left: 12px;
+    translate: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+  }
+  .shell__chapter { padding: 6px 4px; text-align: center; font-size: 13px; }
+  .shell__page { padding-bottom: 88px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shell__track { transition: none; }
+}
