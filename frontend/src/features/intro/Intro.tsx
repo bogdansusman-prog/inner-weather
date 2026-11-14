@@ -234,7 +234,7 @@ export default function Intro({ onLoggedIn }: Props) {
           <p className="intro__slogan">Every storm passes.</p>
           {authView === 'login'
             ? <LoginCard onCreateAccount={() => setAuthView('register')} onLoggedIn={handleLoggedIn} />
-            : <RegisterCard onBack={() => setAuthView('login')} />}
+            : <RegisterCard onBack={() => setAuthView('login')} onRegistered={handleLoggedIn} />}
         </div>
       )}
 
