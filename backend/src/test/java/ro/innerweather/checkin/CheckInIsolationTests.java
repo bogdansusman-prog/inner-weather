@@ -71,4 +71,99 @@ class CheckInIsolationTests extends IntegrationTest {
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$.code").value("UNAUTHORIZED"));
     }
+    @Test
+    void getByIdReturnsOwnCheckIn() throws Exception {
+        String token = registerUser(uniqueEmail());
+
+        String response = mvc.perform(post("/api/check-ins")
+                        .header(HttpHeaders.AUTHORIZATION, bearer(token))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {"energy": 0.5, "pleasantness": 0.3, "note": "test note"}
+                            """))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+
+        String id = new com.fasterxml.jackson.databind.ObjectMapper()
+                .readTree(response).get("id").asText();
+
+        mvc.perform(get("/api/check-ins/" + id)
+                        .header(HttpHeaders.AUTHORIZATION, bearer(token)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.note").value("test note"));
+    }
+
+    @Test
+    void getByIdOfOtherUserReturns404() throws Exception {
+        String tokenA = registerUser(uniqueEmail());
+        String tokenB = registerUser(uniqueEmail());
+
+        String response = mvc.perform(post("/api/check-ins")
+                        .header(HttpHeaders.AUTHORIZATION, bearer(tokenA))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {"energy": 0.5, "pleasantness": 0.3}
+                            """))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+
+        String id = new com.fasterxml.jackson.databind.ObjectMapper()
+                .readTree(response).get("id").asText();
+
+        mvc.perform(get("/api/check-ins/" + id)
+                        .header(HttpHeaders.AUTHORIZATION, bearer(tokenB)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("NOT_FOUND"));
+    }
+
+    @Test
+    void deleteOwnCheckInReturns204() throws Exception {
+        String token = registerUser(uniqueEmail());
+
+        String response = mvc.perform(post("/api/check-ins")
+                        .header(HttpHeaders.AUTHORIZATION, bearer(token))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {"energy": 0.5, "pleasantness": 0.3}
+                            """))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+
+        String id = new com.fasterxml.jackson.databind.ObjectMapper()
+                .readTree(response).get("id").asText();
+
+        mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+                        .delete("/api/check-ins/" + id)
+                        .header(HttpHeaders.AUTHORIZATION, bearer(token)))
+                .andExpect(status().isNoContent());
+
+        mvc.perform(get("/api/check-ins/" + id)
+                        .header(HttpHeaders.AUTHORIZATION, bearer(token)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void deleteOtherUsersCheckInReturns404() throws Exception {
+        String tokenA = registerUser(uniqueEmail());
+        String tokenB = registerUser(uniqueEmail());
+
+        String response = mvc.perform(post("/api/check-ins")
+                        .header(HttpHeaders.AUTHORIZATION, bearer(tokenA))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                            {"energy": 0.5, "pleasantness": 0.3}
+                            """))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+
+        String id = new com.fasterxml.jackson.databind.ObjectMapper()
+                .readTree(response).get("id").asText();
+
+        mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+                        .delete("/api/check-ins/" + id)
+                        .header(HttpHeaders.AUTHORIZATION, bearer(tokenB)))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("NOT_FOUND"));
+    }
 }

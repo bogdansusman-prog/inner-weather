@@ -6,13 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.time.YearMonth;
@@ -49,5 +43,18 @@ public class CheckInController {
                                      @RequestParam @DateTimeFormat(pattern = "yyyy-MM") YearMonth month,
                                      @RequestParam(defaultValue = "UTC") ZoneId zone) {
         return service.calendar(UUID.fromString(jwt.getSubject()), month, zone);
+    }
+
+    @GetMapping("/{id}")
+    public CheckInResponse getById(@AuthenticationPrincipal Jwt jwt,
+                                   @PathVariable UUID id) {
+        return service.getById(UUID.fromString(jwt.getSubject()), id);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@AuthenticationPrincipal Jwt jwt,
+                       @PathVariable UUID id) {
+        service.delete(UUID.fromString(jwt.getSubject()), id);
     }
 }
