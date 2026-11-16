@@ -20,10 +20,10 @@ public class AuthService {
 
     private final UserRepository users;
     private final TherapistProfileRepository therapists;
+    private final RefreshTokenRepository refreshTokens;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    // totul intr-o tranzactie: daca ceva crapa, nu ramane un cont pe jumatate
     @Transactional
     public AuthResponse register(RegisterRequest request) {
         String email = normalize(request.email());
@@ -54,20 +54,48 @@ public class AuthService {
             TherapistProfile profile = new TherapistProfile();
             profile.setUserId(saved.getId());
             profile.setLicenseNumber(request.licenseNumber().trim());
-            therapists.save(profile); // porneste PENDING
+            therapists.save(profile);
         }
 
-        return new AuthResponse(jwtService.generate(saved));
+        return buildAuthResponse(saved);
     }
 
+    @Transactional
     public AuthResponse login(LoginRequest request) {
         User user = users.findByEmail(normalize(request.email()))
                 .filter(u -> passwordEncoder.matches(request.password(), u.getPasswordHash()))
                 .orElseThrow(() -> ApiException.unauthorized("INVALID_CREDENTIALS", "Invalid credentials"));
-        return new AuthResponse(jwtService.generate(user));
+        return buildAuthResponse(user);
     }
 
-    // clientul se poate lega doar de un terapeut aprobat
+    @Transactional
+    public AuthResponse refresh(String refreshToken) {
+        String hash = jwtService.hashToken(refreshToken);
+        RefreshToken stored = refreshTokens.findByTokenHash(hash)
+                .orElseThrow(() -> ApiException.unauthorized("INVALID_REFRESH_TOKEN", "Invalid or expired refresh token"));
+
+        if (stored.getExpiresAt().isBefore(java.time.Instant.now())) {
+            refreshTokens.delete(stored);
+            throw ApiException.unauthorized("INVALID_REFRESH_TOKEN", "Invalid or expired refresh token");
+        }
+
+        User user = users.findById(stored.getUserId())
+                .orElseThrow(() -> ApiException.unauthorized("INVALID_REFRESH_TOKEN", "Invalid or expired refresh token"));
+
+        refreshTokens.delete(stored);
+        return buildAuthResponse(user);
+    }
+
+    private AuthResponse buildAuthResponse(User user) {
+        String rawRefresh = jwtService.generateRefreshToken();
+        RefreshToken token = new RefreshToken();
+        token.setUserId(user.getId());
+        token.setTokenHash(jwtService.hashToken(rawRefresh));
+        token.setExpiresAt(jwtService.refreshTokenExpiry());
+        refreshTokens.save(token);
+        return new AuthResponse(jwtService.generateAccessToken(user), rawRefresh);
+    }
+
     private UUID findApprovedTherapist(String code) {
         requireText("therapistCode", code, "Therapist code is required");
         return therapists.findByInviteCodeAndStatus(code.trim().toUpperCase(), TherapistStatus.APPROVED)
