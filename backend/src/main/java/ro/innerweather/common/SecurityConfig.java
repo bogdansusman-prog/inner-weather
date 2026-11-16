@@ -27,22 +27,29 @@ import java.nio.charset.StandardCharsets;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                   SecurityErrorHandler errors) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(a -> a
-                .requestMatchers(
-                        "/api/auth/**",
-                        "/error",
-                        "/v3/api-docs/**",
-                        "/swagger-ui/**",
-                        "/swagger-ui.html"
-                ).permitAll()
-                        .requestMatchers("/api/admin/**")
-                        .hasRole("ADMIN")
-                .anyRequest().authenticated())
+                        .requestMatchers(
+                                "/api/auth/**",
+                                "/error",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated())
+                // 401 si 403 in formatul ApiError (cerere fara token / rol nepermis)
+                .exceptionHandling(e -> e
+                        .authenticationEntryPoint(errors)
+                        .accessDeniedHandler(errors))
                 .oauth2ResourceServer(o -> o
+                        // la fel pentru token invalid sau expirat
+                        .authenticationEntryPoint(errors)
+                        .accessDeniedHandler(errors)
                         .jwt(j -> j.jwtAuthenticationConverter(jwtAuthenticationConverter())));
         return http.build();
     }
