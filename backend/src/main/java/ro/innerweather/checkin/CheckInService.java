@@ -3,6 +3,7 @@ package ro.innerweather.checkin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ro.innerweather.common.ApiException;
 import ro.innerweather.user.UserRepository;
 
 import java.time.Instant;
@@ -29,6 +30,7 @@ public class CheckInService {
         checkIn.setEnergy(request.energy());
         checkIn.setPleasantness(request.pleasantness());
         checkIn.setEmotionLabel(request.emotionLabel());
+        checkIn.setNote(request.note());
         checkIn.setSleepHours(request.sleepHours());
         checkIn.setMovement(request.movement());
         checkIn.setCoffee(request.coffee());
@@ -75,6 +77,20 @@ public class CheckInService {
                 round2(energy),
                 round2(pleasantness),
                 Weather.of(energy, pleasantness));
+    }
+
+    @Transactional(readOnly = true)
+    public CheckInResponse getById(UUID userId, UUID checkInId) {
+        return checkIns.findByIdAndUserId(checkInId, userId)
+                .map(CheckInResponse::from)
+                .orElseThrow(() -> ApiException.notFound( "Check-in not found"));
+    }
+
+    @Transactional
+    public void delete(UUID userId, UUID checkInId) {
+        CheckIn checkIn = checkIns.findByIdAndUserId(checkInId, userId)
+                .orElseThrow(() -> ApiException.notFound("Check-in not found"));
+        checkIns.delete(checkIn);
     }
 
     private static double round2(double value) {

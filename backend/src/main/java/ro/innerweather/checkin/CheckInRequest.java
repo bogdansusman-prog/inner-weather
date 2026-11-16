@@ -10,6 +10,7 @@ public record CheckInRequest(
         @NotNull @DecimalMin("-1.0") @DecimalMax("1.0") Double energy,
         @NotNull @DecimalMin("-1.0") @DecimalMax("1.0") Double pleasantness,
         @Size(max = 50) String emotionLabel,
+        @Size(max = 500) String note,
         @DecimalMin("0.0") @DecimalMax("24.0") Double sleepHours,
         Boolean movement,
         Boolean coffee,
