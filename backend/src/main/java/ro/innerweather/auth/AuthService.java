@@ -1,11 +1,10 @@
 package ro.innerweather.auth;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
+import ro.innerweather.common.ApiException;
 import ro.innerweather.therapist.TherapistProfile;
 import ro.innerweather.therapist.TherapistProfileRepository;
 import ro.innerweather.therapist.TherapistStatus;
@@ -29,7 +28,7 @@ public class AuthService {
     public AuthResponse register(RegisterRequest request) {
         String email = normalize(request.email());
         if (users.existsByEmail(email)) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already in use");
+            throw ApiException.conflict("EMAIL_TAKEN", "Email already in use");
         }
 
         User user = new User();
@@ -45,7 +44,7 @@ public class AuthService {
             }
             case THERAPIST -> {
                 user.setRole(Role.THERAPIST);
-                requireText(request.licenseNumber(), "License number is required");
+                requireText("licenseNumber", request.licenseNumber(), "License number is required");
             }
         }
 
@@ -64,23 +63,21 @@ public class AuthService {
     public AuthResponse login(LoginRequest request) {
         User user = users.findByEmail(normalize(request.email()))
                 .filter(u -> passwordEncoder.matches(request.password(), u.getPasswordHash()))
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.UNAUTHORIZED, "Invalid credentials"));
+                .orElseThrow(() -> ApiException.unauthorized("INVALID_CREDENTIALS", "Invalid credentials"));
         return new AuthResponse(jwtService.generate(user));
     }
 
     // clientul se poate lega doar de un terapeut aprobat
     private UUID findApprovedTherapist(String code) {
-        requireText(code, "Therapist code is required");
+        requireText("therapistCode", code, "Therapist code is required");
         return therapists.findByInviteCodeAndStatus(code.trim().toUpperCase(), TherapistStatus.APPROVED)
                 .map(TherapistProfile::getUserId)
-                .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST, "Unknown therapist code"));
+                .orElseThrow(() -> ApiException.invalidField("therapistCode", "Unknown therapist code"));
     }
 
-    private void requireText(String value, String message) {
+    private void requireText(String field, String value, String message) {
         if (value == null || value.isBlank()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
+            throw ApiException.invalidField(field, message);
         }
     }
 
