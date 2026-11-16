@@ -1,4 +1,4 @@
 package ro.innerweather.auth;
 
-public record AuthResponse(String accessToken) {
+public record AuthResponse(String accessToken, String refreshToken) {
 }
