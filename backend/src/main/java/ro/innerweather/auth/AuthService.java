@@ -23,6 +23,7 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokens;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final LoginRateLimiter rateLimiter;
 
     @Transactional
     public AuthResponse register(RegisterRequest request) {
@@ -62,10 +63,25 @@ public class AuthService {
 
     @Transactional
     public AuthResponse login(LoginRequest request) {
-        User user = users.findByEmail(normalize(request.email()))
+        String email = normalize(request.email());
+
+        if (!rateLimiter.tryConsume(email)) {
+            throw ApiException.unauthorized("TOO_MANY_ATTEMPTS",
+                    "Too many login attempts. Try again in 15 minutes.");
+        }
+
+        User user = users.findByEmail(email)
                 .filter(u -> passwordEncoder.matches(request.password(), u.getPasswordHash()))
                 .orElseThrow(() -> ApiException.unauthorized("INVALID_CREDENTIALS", "Invalid credentials"));
+
         return buildAuthResponse(user);
+    }
+
+    @Transactional
+    public void logout(String refreshToken) {
+        String hash = jwtService.hashToken(refreshToken);
+        refreshTokens.findByTokenHash(hash)
+                .ifPresent(refreshTokens::delete);
     }
 
     @Transactional
