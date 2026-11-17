@@ -60,6 +60,6 @@ public class JwtService {
     }
 
     public Instant refreshTokenExpiry() {
-        return Instant.now().plus(refreshDays, ChronoUnit.DAYS);
+        return Instant.now().plus(1, ChronoUnit.HOURS); //modificat la o ora
     }
 }
