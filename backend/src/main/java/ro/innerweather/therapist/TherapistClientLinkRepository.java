@@ -15,4 +15,6 @@ public interface TherapistClientLinkRepository extends JpaRepository<TherapistCl
     Optional<TherapistClientLink> findByTherapistIdAndClientId(UUID therapistId, UUID clientId);
 
     boolean existsByTherapistIdAndClientId(UUID therapistId, UUID clientId);
+
+    Optional<TherapistClientLink> findByClientIdAndStatus(UUID clientId, LinkStatus status);
 }

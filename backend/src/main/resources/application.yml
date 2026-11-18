@@ -19,4 +19,4 @@ server:
 
 journal:
   encryption:
-    key: M/N79V/NjFQ4Q+C2HjKTtWzfLBe/q7gDZnJOC2klCFs=
+    key: ${JOURNAL_ENCRYPTION_KEY}
