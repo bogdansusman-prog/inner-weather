@@ -30,15 +30,20 @@ export class CometPath {
 
 // Coada: mergem inapoi pe drum pana adunam lungimea ei;
 // segmentele sunt tot mai groase si mai luminoase spre cap.
-export function drawTail(ctx: CanvasRenderingContext2D, path: CometPath) {
+// maxAgeMs: bucatile mai vechi de atat dispar, ca sa nu ramana coada "inghetata"
+// cand cometa se opreste brusc (ex. picatura din intro, cand atinge apa).
+export function drawTail(ctx: CanvasRenderingContext2D, path: CometPath, maxAgeMs = Infinity) {
   const trail = path.samples;
+  const now = trail[trail.length - 1]?.t ?? 0;
   const tailLength = TAIL_PX + Math.min(320, path.speed * 0.4);
   ctx.lineCap = 'round';
   let walked = 0;
   for (let i = trail.length - 1; i > 0 && walked < tailLength; i--) {
     const a = trail[i - 1];
     const b = trail[i];
-    const k = 1 - walked / tailLength; // 1 la cap, 0 la capatul cozii
+    const age = 1 - (now - b.t) / maxAgeMs; // 1 = proaspat, 0 = prea vechi
+    if (age <= 0) break;
+    const k = (1 - walked / tailLength) * Math.min(1, age); // 1 la cap, 0 la capatul cozii
     walked += Math.hypot(b.x - a.x, b.y - a.y);
 
     ctx.strokeStyle = `rgba(124, 108, 240, ${0.55 * k * k})`;

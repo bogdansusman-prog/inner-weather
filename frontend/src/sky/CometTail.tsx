@@ -1,6 +1,9 @@
 import { useEffect, useRef, type RefObject } from 'react';
 import { CometPath, drawTail, fitCanvas } from './cometDraw';
 
+// coada punctului se stinge in jumatate de secunda dupa ce punctul se opreste
+const TAIL_FADE_MS = 500;
+
 type Props = {
   target: RefObject<HTMLElement | null>; // elementul care e "capul" cometei
   className?: string;
@@ -36,7 +39,7 @@ export default function CometTail({ target, className }: Props) {
         const visible = r.width > 0 && getComputedStyle(el).opacity !== '0';
         if (visible) {
           path.add(r.left + r.width / 2 - c.left, r.top + r.height / 2 - c.top, now);
-          drawTail(ctx, path);
+          drawTail(ctx, path, TAIL_FADE_MS);
         } else {
           path.clear();
         }
