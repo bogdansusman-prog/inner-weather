@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { getMe } from '../../api/auth';
 import { ApiError } from '../../api/client';
 import TopBar from './TopBar';
+import CheckInPage from '../checkin/CheckInPage';
 import './shell.css';
 
 // paginile aplicatiei, in ordinea in care apar la scroll
@@ -62,7 +63,11 @@ export default function Shell({ onLogout }: Props) {
         {PAGES.map((page, i) => (
           // inert: paginile care nu se vad nu pot primi focus sau click
           <section key={page.id} id={page.id} className="shell__page" inert={i !== index}>
-            <h2 className="shell__placeholder">{t(page.label)}</h2>
+            {page.id === 'checkin' ? (
+              <CheckInPage />
+            ) : (
+              <h2 className="shell__placeholder">{t(page.label)}</h2>
+            )}
           </section>
         ))}
       </div>

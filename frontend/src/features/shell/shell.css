@@ -20,6 +20,8 @@
 }
 
 .shell__page {
+  position: relative;
+  isolation: isolate; /* fundalul unei pagini (ex. cerul de la check-in) sta in spatele continutului ei */
   height: 100dvh;
   overflow-y: auto; /* o pagina mai inalta decat ecranul se deruleaza in ea */
   display: grid;
