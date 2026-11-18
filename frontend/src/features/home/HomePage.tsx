@@ -5,8 +5,6 @@ import { WEATHER_TEXT } from '../checkin/weatherText';
 import AddCheckInDialog from './AddCheckInDialog';
 import './home-page.css';
 
-// cate zile aducem: saptamana asta (7) + cea dinainte (7), pentru comparatie
-const DAYS = 14;
 // cat de mare trebuie sa fie diferenta ca sa spunem "mai senin" / "mai innorat"
 const TREND = 0.15;
 
@@ -20,6 +18,11 @@ function dayKey(date: Date) {
   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
 
+// cate zile au trecut de luni (luni = 0, duminica = 6)
+function daysSinceMonday() {
+  return (new Date().getDay() + 6) % 7;
+}
+
 function average(values: number[]) {
   return values.reduce((sum, v) => sum + v, 0) / values.length;
 }
@@ -31,9 +34,9 @@ export default function HomePage({ name, onAdded }: Props) {
   const [loadError, setLoadError] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  // check-in-urile din ultimele 14 zile
+  // check-in-urile de luni saptamana trecuta pana acum (saptamana asta + cea dinainte)
   useEffect(() => {
-    getCheckIns(startOfDayAgo(DAYS - 1))
+    getCheckIns(startOfDayAgo(daysSinceMonday() + 7))
       .then(setCheckIns)
       .catch(() => setLoadError(true));
   }, []);
@@ -58,15 +61,16 @@ export default function HomePage({ name, onAdded }: Props) {
   const today = byDay.get(dayKey(new Date())) ?? [];
   const todayWeather = averageWeather(today);
 
-  // ultimele 7 zile, de la cea mai veche la azi
+  // saptamana asta, mereu de luni pana duminica
+  const sinceMonday = daysSinceMonday();
   const week = Array.from({ length: 7 }, (_, i) => {
-    const date = startOfDayAgo(6 - i);
+    const date = startOfDayAgo(sinceMonday - i); // i = 0 e luni; zilele de dupa azi ies in viitor
     const list = byDay.get(dayKey(date)) ?? [];
-    return { date, weather: averageWeather(list) };
+    return { date, weather: averageWeather(list), isToday: i === sinceMonday, isFuture: i > sinceMonday };
   });
 
-  // saptamana asta fata de cea dinainte: doar cat de placut, fara verdicte
-  const cutoff = startOfDayAgo(6).getTime();
+  // saptamana asta (de luni) fata de cea trecuta: doar cat de placut, fara verdicte
+  const cutoff = startOfDayAgo(sinceMonday).getTime();
   const thisWeek = (checkIns ?? []).filter((c) => new Date(c.checkedInAt).getTime() >= cutoff);
   const lastWeek = (checkIns ?? []).filter((c) => new Date(c.checkedInAt).getTime() < cutoff);
   let trend: string | null = null;
@@ -117,11 +121,24 @@ export default function HomePage({ name, onAdded }: Props) {
       <section className="home-page__week" aria-labelledby="home-week">
         <h3 className="home-page__label" id="home-week">{t('home.week')}</h3>
         <ol className="home-page__days">
-          {week.map(({ date, weather }) => (
-            <li key={dayKey(date)} className="home-page__day" data-weather={weather ?? 'NONE'}>
-              <span className="home-page__dot" aria-hidden="true" />
+          {week.map(({ date, weather, isToday, isFuture }) => (
+            <li
+              key={dayKey(date)}
+              className="home-page__day"
+              data-weather={weather ?? 'NONE'}
+              data-today={isToday}
+              data-future={isFuture}
+            >
+              <span className="home-page__dot" aria-hidden="true">
+                {/* bifa: in ziua asta ai facut check-in */}
+                {weather && (
+                  <svg viewBox="0 0 16 16" className="home-page__check">
+                    <path d="M3.5 8.5l3 3 6-7" />
+                  </svg>
+                )}
+              </span>
               <span className="home-page__dayname">{date.toLocaleDateString(locale, { weekday: 'short' })}</span>
-              <span className="sr-only">{weather ? t(WEATHER_TEXT[weather]) : t('home.noDay')}</span>
+              {!isFuture && <span className="sr-only">{weather ? t(WEATHER_TEXT[weather]) : t('home.noDay')}</span>}
             </li>
           ))}
         </ol>
