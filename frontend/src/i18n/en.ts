@@ -8,6 +8,8 @@ export const en = {
   'menu.settings': 'Settings',
   'menu.about': 'About us',
   'menu.logout': 'Log out',
+  'menu.open': 'Open profile menu',
+  'menu.signedIn': 'Signed in as',
 } as const;
 
 // toate cheile posibile: 'nav.checkin' | 'nav.home' | ...

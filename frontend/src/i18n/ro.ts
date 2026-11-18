@@ -10,4 +10,6 @@ export const ro: Record<TextKey, string> = {
   'menu.settings': 'Setări',
   'menu.about': 'Despre noi',
   'menu.logout': 'Ieșire din cont',
+    'menu.open': 'Deschide meniul de profil',
+  'menu.signedIn': 'Conectat ca',
 };

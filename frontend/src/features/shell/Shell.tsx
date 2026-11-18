@@ -1,6 +1,10 @@
 import { useLanguage } from '../../i18n/LanguageContext';
 import type { TextKey } from '../../i18n/en';
 import { PAGE_MS, usePageNav } from './usePageNav';
+import { useEffect, useState } from 'react';
+import { getMe } from '../../api/auth';
+import { ApiError } from '../../api/client';
+import TopBar from './TopBar';
 import './shell.css';
 
 // paginile aplicatiei, in ordinea in care apar la scroll
@@ -11,14 +15,30 @@ const PAGES: { id: string; label: TextKey }[] = [
   { id: 'games', label: 'nav.games' },
 ];
 
-export default function Shell() {
+type Props = {
+  onLogout: () => void;
+};
+
+export default function Shell({ onLogout }: Props) {
   const { t } = useLanguage();
 
   // index = pagina pe care esti; goTo(i) te duce la pagina i
   const { index, goTo, handlers } = usePageNav(PAGES.length);
 
+    // numele pentru avatar si meniu; daca token-ul a expirat, iesim din cont
+  const [name, setName] = useState<string | null>(null);
+
+  useEffect(() => {
+    getMe()
+      .then((me) => setName(me.name))
+      .catch((err) => {
+        if (err instanceof ApiError && err.status === 401) onLogout();
+      });
+  }, [onLogout]);
+
   return (
     <div className="shell" {...handlers}>
+      <TopBar name={name} onLogout={onLogout} />
       <ul className="shell__chapters">
         {PAGES.map((page, i) => (
           <li key={page.id}>

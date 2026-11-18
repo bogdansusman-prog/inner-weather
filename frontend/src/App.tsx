@@ -4,6 +4,7 @@ import Intro from './features/intro/Intro';
 import { getToken } from './api/client';
 //import { logout } from './api/auth';
 import Shell from './features/shell/Shell';
+import { logout } from './api/auth';
 
 export default function App() {
   // esti logat daca ai un token salvat
@@ -11,8 +12,11 @@ export default function App() {
 
   if (loggedIn) {
     return (
-      <Shell
-        
+        <Shell
+        onLogout={async () => {
+          await logout();
+          setLoggedIn(false);
+        }}
       />
     );
   }
