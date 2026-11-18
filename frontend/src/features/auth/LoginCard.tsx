@@ -39,7 +39,7 @@ export default function LoginCard({ onCreateAccount, onLoggedIn }: Props) {
 
   return (
     <form className="login-card" onSubmit={handleSubmit}>
-      <h2 className="login-card__title">Welcome back</h2>
+      <h2 className="login-card__title">Welcome...</h2>
       <p className="login-card__subtitle">How is your weather today?</p>
 
       <label className="login-card__field">

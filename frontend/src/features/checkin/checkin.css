@@ -1,0 +1,89 @@
+/* Pagina de check-in: intrebarea, harta pe cer si butonul de salvare. */
+.checkin {
+  width: min(600px, 100%);
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+/* o lumina discreta in coltul vremii alese */
+.checkin__sky {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 600ms ease;
+  pointer-events: none;
+}
+.checkin[data-weather='SUNNY'] .checkin__sky  { opacity: 1; background: radial-gradient(circle at 72% 28%, rgba(255, 214, 120, 0.45), transparent 55%); }
+.checkin[data-weather='CALM'] .checkin__sky   { opacity: 1; background: radial-gradient(circle at 72% 72%, rgba(125, 220, 192, 0.4), transparent 55%); }
+.checkin[data-weather='FOGGY'] .checkin__sky  { opacity: 1; background: radial-gradient(circle at 28% 72%, rgba(196, 202, 214, 0.55), transparent 55%); }
+.checkin[data-weather='STORMY'] .checkin__sky { opacity: 1; background: radial-gradient(circle at 28% 28%, rgba(110, 96, 170, 0.35), transparent 55%); }
+
+.checkin__question {
+  margin: 0;
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.checkin__hint {
+  margin: -6px 0 14px;
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+
+.checkin__footer {
+  min-height: 92px;
+  margin-top: 6px;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 10px;
+}
+.checkin__weather {
+  margin: 0;
+  min-height: 28px;
+  font-size: 20px;
+  font-weight: 600;
+}
+.checkin__time { color: var(--ink-soft); font-weight: 500; }
+
+.checkin__save {
+  min-width: 180px;
+  padding: 13px 28px;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: var(--action);
+  color: #fff;
+  font: 600 15px var(--font);
+  cursor: pointer;
+  transition: background var(--dur-fast) ease, transform var(--dur-fast) var(--ease-soft);
+}
+.checkin__save:hover:not(:disabled) { background: var(--action-hover); transform: translateY(-1px); }
+.checkin__save:disabled { opacity: 0.45; cursor: default; }
+.checkin__save:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
+
+.checkin__saved {
+  margin: 0;
+  padding: 10px 16px;
+  border-radius: var(--radius-control);
+  background: rgba(255, 255, 255, 0.7);
+  font-size: 15px;
+  animation: checkin-pop 260ms var(--ease-soft) both;
+}
+@keyframes checkin-pop { from { scale: 0.92; opacity: 0; } }
+
+.checkin__error {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--radius-control);
+  background: var(--danger-bg);
+  color: var(--danger);
+  font-size: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .checkin__sky { transition: none; }
+  .checkin__saved { animation: none; }
+}

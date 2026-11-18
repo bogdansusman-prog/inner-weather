@@ -1,14 +1,21 @@
-import { apiFetch, setToken } from './client';
+import { apiFetch, getRefreshToken, setRefreshToken, setToken } from './client';
 
-type AuthResponse = { accessToken: string };
+// backend-ul trimite doua token-uri: unul pentru cereri, unul pentru logout / reinnoire
+type AuthResponse = { accessToken: string; refreshToken: string };
 
-// Trimite email + parola; daca sunt corecte, salveaza token-ul primit
+// salveaza amandoua token-urile primite de la server
+function saveTokens({ accessToken, refreshToken }: AuthResponse) {
+  setToken(accessToken);
+  setRefreshToken(refreshToken);
+}
+
+// Trimite email + parola; daca sunt corecte, salveaza token-urile primite
 export async function login(email: string, password: string) {
-  const { accessToken } = await apiFetch<AuthResponse>('/auth/login', {
+  const tokens = await apiFetch<AuthResponse>('/auth/login', {
     method: 'POST',
     body: JSON.stringify({ email, password }),
   });
-  setToken(accessToken);
+  saveTokens(tokens);
 }
 
 export type AccountType = 'USER' | 'CLIENT' | 'THERAPIST';
@@ -22,13 +29,13 @@ export type RegisterData = {
   licenseNumber?: string; // doar pentru THERAPIST
 };
 
-// Creeaza contul; backend-ul raspunde cu un token, ca la login
+// Creeaza contul; backend-ul raspunde cu token-uri, ca la login
 export async function register(data: RegisterData) {
-  const { accessToken } = await apiFetch<AuthResponse>('/auth/register', {
+  const tokens = await apiFetch<AuthResponse>('/auth/register', {
     method: 'POST',
     body: JSON.stringify(data),
   });
-  setToken(accessToken);
+  saveTokens(tokens);
 }
 
 export type Me = {
@@ -45,6 +52,19 @@ export function getMe() {
   return apiFetch<Me>('/me');
 }
 
-export function logout() {
+// Iesire din cont: anuleaza refresh token-ul pe server, apoi sterge totul din browser
+export async function logout() {
+  const refreshToken = getRefreshToken();
+  try {
+    if (refreshToken) {
+      await apiFetch('/auth/logout', {
+        method: 'POST',
+        body: JSON.stringify({ refreshToken }),
+      });
+    }
+  } catch {
+    // daca serverul nu raspunde, iesim oricum din cont pe acest calculator
+  }
   setToken(null);
+  setRefreshToken(null);
 }

@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import Intro from './features/intro/Intro';
-import Home from './features/home/Home';
+//import Home from './features/home/Home';
 import { getToken } from './api/client';
+//import { logout } from './api/auth';
+import Shell from './features/shell/Shell';
 import { logout } from './api/auth';
 
 export default function App() {
@@ -10,9 +12,9 @@ export default function App() {
 
   if (loggedIn) {
     return (
-      <Home
-        onLogout={() => {
-          logout();
+        <Shell
+        onLogout={async () => {
+          await logout();
           setLoggedIn(false);
         }}
       />
