@@ -1,0 +1,95 @@
+/* Cercul vremii din Istoric si legenda lui. */
+.donut {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 18px 28px;
+  margin: 0;
+}
+
+.donut__ring {
+  position: relative;
+  width: 148px;
+  height: 148px;
+  flex: none;
+}
+.donut__svg {
+  width: 100%;
+  height: 100%;
+  rotate: -90deg; /* primul punct al cercului sa fie sus, nu in dreapta */
+}
+.donut__track,
+.donut__slice {
+  fill: none;
+  stroke-width: 14;
+}
+.donut__track { stroke: rgba(37, 33, 63, 0.08); }
+
+/* culorile vremii, ca peste tot */
+.donut [data-weather='SUNNY']  { --weather-color: #ffc857; }
+.donut [data-weather='CALM']   { --weather-color: #7ddcc0; }
+.donut [data-weather='FOGGY']  { --weather-color: #b9c3d6; }
+.donut [data-weather='STORMY'] { --weather-color: #7a6cc4; }
+
+/* fiecare felie se "umple" de la 0 pana la lungimea ei, pe rand (delay din TSX) */
+.donut__slice {
+  stroke: var(--weather-color);
+  stroke-linecap: round;
+  animation: donut-fill 700ms var(--ease-soft) both;
+}
+@keyframes donut-fill {
+  from { stroke-dasharray: 0 400; }
+}
+
+.donut__center {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  animation: donut-center 500ms ease 300ms both;
+}
+@keyframes donut-center { from { opacity: 0; scale: 0.9; } }
+.donut__percent {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.donut__label {
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.donut__legend {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+}
+.donut__legend li {
+  display: grid;
+  grid-template-columns: 12px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  min-width: 150px;
+}
+.donut__legend li[data-empty='true'] { opacity: 0.45; }
+.donut__dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--weather-color);
+}
+.donut__value {
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .donut__slice, .donut__center { animation: none; }
+}

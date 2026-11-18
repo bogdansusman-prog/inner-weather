@@ -7,6 +7,7 @@ import type { TextKey } from '../../i18n/en';
 import Stars from '../../sky/Stars';
 import CheckInPage from '../checkin/CheckInPage';
 import ThankYou from '../checkin/ThankYou';
+import HistoryPage from '../history/HistoryPage';
 import HomePage from '../home/HomePage';
 import Comet from './Comet';
 import TopBar from './TopBar';
@@ -22,6 +23,7 @@ const PAGES: { id: string; label: TextKey }[] = [
 ];
 const CHECKIN = 0;
 const HOME = 1;
+const HISTORY = 2;
 
 // dupa check-in-ul zilnic, cat asteptam inainte sa mergem pe Home
 const AFTER_SAVE_MS = 1400;
@@ -163,6 +165,9 @@ function ShellPages({ name, today, onCheckedIn, onLogout }: PagesProps) {
             ) : page.id === 'home' ? (
               // key: dupa check-in-ul zilnic, Home se reincarca cu el
               <HomePage key={today?.id ?? 'open'} name={name} onAdded={handleAdded} />
+            ) : page.id === 'history' ? (
+              // active: cand ajungi pe pagina, reincarcam datele (poate ai adaugat check-in-uri)
+              <HistoryPage active={i === HISTORY && index === HISTORY} />
             ) : (
               <h2 className="shell__placeholder">{t(page.label)}</h2>
             )}
