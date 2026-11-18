@@ -128,14 +128,34 @@
   gap: 6px;
 }
 .home-page__dot {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
   box-shadow: inset 0 0 0 1px rgba(37, 33, 63, 0.08);
 }
+/* zi trecuta fara check-in: doar conturul */
 .home-page__day[data-weather='NONE'] .home-page__dot {
   border: 1.5px dashed rgba(37, 33, 63, 0.25);
 }
-.home-page__day:last-child .home-page__dot { box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.25); } /* azi */
+/* zilele care n-au venit inca: estompate */
+.home-page__day[data-future='true'] { opacity: 0.4; }
+.home-page__day[data-future='true'] .home-page__dot { border-style: dotted; }
+/* azi: un inel in jur */
+.home-page__day[data-today='true'] .home-page__dot { box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.3); }
+.home-page__day[data-today='true'] .home-page__dayname { color: var(--ink); }
+
+/* bifa din bulina: inchisa pe culorile deschise, alba pe furtuna */
+.home-page__check {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.home-page__day[data-weather='STORMY'] .home-page__check { stroke: #fff; }
 .home-page__dayname {
   color: var(--ink-soft);
   font-size: 12px;
