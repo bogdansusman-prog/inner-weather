@@ -8,6 +8,11 @@ const SETTLE_MS = 150;
 const MIN_WHEEL = 8;  // miscari mai mici de atat sunt "zgomot"
 const MIN_SWIPE = 50; // cati pixeli trebuie sa tragi cu degetul
 
+// Cat timp e deschisa o fereastra peste ecran (dialog), paginile stau pe loc.
+function dialogOpen() {
+  return document.querySelector('dialog[open]') !== null;
+}
+
 // O pagina mai inalta decat ecranul se deruleaza intai ea; abia la capat schimbam pagina.
 function canScrollInside(target: EventTarget | null, direction: 1 | -1, root: Element) {
   let el = target instanceof Element ? target : null;
@@ -44,6 +49,7 @@ export function usePageNav(count: number, initialIndex = 0) {
 
   const step = useCallback(
     (direction: 1 | -1) => {
+      if (dialogOpen()) return;
       if (performance.now() < lockedUntil.current) return;
       goTo(indexRef.current + direction);
     },
@@ -56,6 +62,8 @@ export function usePageNav(count: number, initialIndex = 0) {
       const target = e.target;
       // nu furam tastele cand cineva scrie intr-un camp
       if (target instanceof HTMLElement && (target.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName))) return;
+
+      if (dialogOpen()) return;
 
       if (e.key === 'ArrowDown' || e.key === 'PageDown') step(1);
       else if (e.key === 'ArrowUp' || e.key === 'PageUp') step(-1);

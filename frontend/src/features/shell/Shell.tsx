@@ -6,6 +6,7 @@ import { useLanguage } from '../../i18n/LanguageContext';
 import type { TextKey } from '../../i18n/en';
 import Stars from '../../sky/Stars';
 import CheckInPage from '../checkin/CheckInPage';
+import HomePage from '../home/HomePage';
 import Comet from './Comet';
 import TopBar from './TopBar';
 import { PAGE_MS, usePageNav } from './usePageNav';
@@ -109,6 +110,11 @@ function ShellPages({ name, today, onCheckedIn, onLogout }: PagesProps) {
     }, AFTER_SAVE_MS);
   }
 
+  // un check-in adaugat din Home: daca e primul de azi, el e cel zilnic
+  function handleAdded(checkIn: CheckIn) {
+    if (!today) onCheckedIn(checkIn);
+  }
+
   return (
     <div className="shell" data-page={PAGES[index].id} {...handlers}>
       {/* cerul se schimba de la o pagina la alta, ca o zi intreaga */}
@@ -147,6 +153,9 @@ function ShellPages({ name, today, onCheckedIn, onLogout }: PagesProps) {
             {page.id === 'checkin' ? (
               // key: o zi noua (sau un check-in nou) porneste pagina de la zero
               <CheckInPage key={today?.id ?? 'open'} today={today} onSaved={handleSaved} />
+            ) : page.id === 'home' ? (
+              // key: dupa check-in-ul zilnic, Home se reincarca cu el
+              <HomePage key={today?.id ?? 'open'} name={name} onAdded={handleAdded} />
             ) : (
               <h2 className="shell__placeholder">{t(page.label)}</h2>
             )}

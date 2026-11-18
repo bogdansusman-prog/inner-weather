@@ -26,6 +26,22 @@ export const en = {
   'weather.foggy': 'Foggy',
   'checkin.doneTitle': "You've checked in today",
   'checkin.doneHint': 'Feeling different later? Add another check-in from Home.',
+  'home.morning': 'Good morning',
+  'home.afternoon': 'Good afternoon',
+  'home.evening': 'Good evening',
+  'home.today': 'Your weather today',
+  'home.empty': 'No check-in yet today.',
+  'home.countOne': 'From 1 check-in',
+  'home.countMany': 'Average of {n} check-ins',
+  'home.add': 'Add a check-in',
+  'home.week': 'Your last 7 days',
+  'home.noDay': 'no check-in',
+  'home.brighter': 'A brighter week than the one before.',
+  'home.cloudier': 'A cloudier week than the one before.',
+  'home.same': 'About the same as the week before.',
+  'home.loadError': "We couldn't load your check-ins.",
+  'dialog.title': 'How do you feel right now?',
+  'dialog.cancel': 'Cancel',
 } as const;
 
 // toate cheile posibile: 'nav.checkin' | 'nav.home' | ...

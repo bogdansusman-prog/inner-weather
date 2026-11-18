@@ -26,15 +26,29 @@ export function getCheckIns(from: Date) {
   return apiFetch<CheckIn[]>(`/check-ins?from=${encodeURIComponent(from.toISOString())}`);
 }
 
-// Azi, la 00:00, dupa ceasul calculatorului (ora Romaniei pentru noi)
-export function startOfToday() {
+// Acum `days` zile, la 00:00, dupa ceasul calculatorului (ora Romaniei pentru noi)
+export function startOfDayAgo(days: number) {
   const date = new Date();
+  date.setDate(date.getDate() - days);
   date.setHours(0, 0, 0, 0);
   return date;
+}
+
+// Azi, la 00:00
+export function startOfToday() {
+  return startOfDayAgo(0);
 }
 
 // Aceeasi regula ca in backend, ca sa aratam vremea inainte de salvare
 export function weatherOf(energy: number, pleasantness: number): Weather {
   if (energy >= 0) return pleasantness >= 0 ? 'SUNNY' : 'STORMY';
   return pleasantness >= 0 ? 'CALM' : 'FOGGY';
+}
+
+// Vremea medie a mai multor check-in-uri (ca in calendarul din backend); null daca lista e goala
+export function averageWeather(list: CheckIn[]): Weather | null {
+  if (list.length === 0) return null;
+  const energy = list.reduce((sum, c) => sum + c.energy, 0) / list.length;
+  const pleasantness = list.reduce((sum, c) => sum + c.pleasantness, 0) / list.length;
+  return weatherOf(energy, pleasantness);
 }
