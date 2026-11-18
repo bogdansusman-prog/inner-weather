@@ -10,13 +10,20 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class LoginRateLimiter {
 
-    // un bucket per email — max 5 incercari, se reincarca 5 la fiecare 15 minute
     private final ConcurrentHashMap<String, Bucket> buckets = new ConcurrentHashMap<>();
 
-    public boolean tryConsume(String email) {
-        return buckets
-                .computeIfAbsent(email.toLowerCase(), k -> newBucket())
+    public void recordFailure(String email) {
+        buckets.computeIfAbsent(email.toLowerCase(), k -> newBucket())
                 .tryConsume(1);
+    }
+
+    public boolean isAllowed(String email) {
+        return buckets.computeIfAbsent(email.toLowerCase(), k -> newBucket())
+                .getAvailableTokens() > 0;
+    }
+
+    public void reset(String email) {
+        buckets.remove(email.toLowerCase());
     }
 
     private Bucket newBucket() {
