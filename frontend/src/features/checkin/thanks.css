@@ -1,0 +1,122 @@
+/* Multumirea de dupa check-in-ul zilnic: un card care apare, sta putin si pleaca. */
+.thanks {
+  position: fixed;
+  inset: 0;
+  z-index: 4; /* peste pagini si peste bara de sus */
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  pointer-events: none; /* nu opreste click-urile sau scroll-ul */
+  animation: thanks-life 3000ms linear both; /* durata vine din TSX */
+}
+
+/* culoarea vremii: bulina si razele */
+.thanks[data-weather='SUNNY']  { --thanks-color: #ffc857; --thanks-glow: rgba(255, 200, 87, 0.35); }
+.thanks[data-weather='CALM']   { --thanks-color: #7ddcc0; --thanks-glow: rgba(125, 220, 192, 0.35); }
+.thanks[data-weather='FOGGY']  { --thanks-color: #b9c3d6; --thanks-glow: rgba(185, 195, 214, 0.45); }
+.thanks[data-weather='STORMY'] { --thanks-color: #7a6cc4; --thanks-glow: rgba(122, 108, 196, 0.35); }
+
+/* toata viata cardului: intra, sta, se ridica putin si dispare */
+@keyframes thanks-life {
+  0%   { opacity: 0; translate: 0 14px; }
+  10%  { opacity: 1; translate: 0 0; }
+  88%  { opacity: 1; translate: 0 0; }
+  100% { opacity: 0; translate: 0 -12px; }
+}
+
+.thanks__card {
+  min-width: min(340px, 100%);
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 30px 34px 26px;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: var(--radius-card);
+  background: rgba(255, 255, 255, 0.74);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 24px 60px rgba(37, 33, 63, 0.18);
+  color: var(--ink);
+  text-align: center;
+  animation: thanks-pop 520ms var(--ease-soft) both;
+}
+@keyframes thanks-pop { from { scale: 0.9; } }
+
+/* bulina cu bifa, in culoarea vremii */
+.thanks__orb {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 12px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.7), var(--thanks-color) 70%);
+  box-shadow: 0 0 0 0 var(--thanks-glow);
+  animation: thanks-glow 1600ms ease-out 200ms 2;
+}
+@keyframes thanks-glow {
+  0%   { box-shadow: 0 0 0 0 var(--thanks-glow); }
+  100% { box-shadow: 0 0 0 18px transparent; }
+}
+
+/* bifa se deseneaza singura */
+.thanks__check {
+  width: 30px;
+  height: 30px;
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 24;
+  stroke-dashoffset: 24;
+  animation: thanks-draw 420ms var(--ease-soft) 260ms forwards;
+}
+.thanks[data-weather='STORMY'] .thanks__check { stroke: #fff; }
+@keyframes thanks-draw { to { stroke-dashoffset: 0; } }
+
+/* razele: cate un punct care zboara din marginea bulinei si se stinge */
+.thanks__ray {
+  position: absolute;
+  inset: 0;
+}
+.thanks__ray::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: calc(50% - 3px);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--thanks-color);
+  opacity: 0;
+  animation: thanks-ray 760ms var(--ease-soft) 180ms;
+}
+@keyframes thanks-ray {
+  0%   { opacity: 1; translate: 0 0; }
+  100% { opacity: 0; translate: 0 -26px; }
+}
+
+.thanks__title {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+.thanks__weather {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+
+/* fara miscare: doar apare si dispare */
+@media (prefers-reduced-motion: reduce) {
+  .thanks { animation-name: thanks-fade; }
+  .thanks__card, .thanks__orb { animation: none; }
+  .thanks__check { animation: none; stroke-dashoffset: 0; }
+  .thanks__ray { display: none; }
+}
+@keyframes thanks-fade {
+  0%, 100% { opacity: 0; }
+  8%, 90% { opacity: 1; }
+}

@@ -1,0 +1,94 @@
+/* Fereastra pentru un check-in in plus. */
+.add-dialog {
+  width: min(600px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px);
+  padding: 0;
+  border: 0;
+  border-radius: 28px;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font);
+  overflow: visible;
+}
+.add-dialog::backdrop {
+  background: rgba(22, 18, 58, 0.45);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.add-dialog[open] { animation: dialog-in 260ms var(--ease-soft) both; }
+.add-dialog[open]::backdrop { animation: backdrop-in 260ms ease both; }
+@keyframes dialog-in { from { opacity: 0; transform: translateY(16px) scale(0.98); } }
+@keyframes backdrop-in { from { opacity: 0; } }
+
+/* cardul: un colt de cer, ca sa se vada harta alba */
+.add-dialog__card {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  padding: 28px 24px 22px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, #8fb8e8 0%, #c5d3f0 60%, #f1edf6 100%);
+  box-shadow: 0 30px 80px rgba(22, 18, 58, 0.35);
+  overflow-y: auto;
+  max-height: calc(100dvh - 24px);
+}
+
+.add-dialog__title {
+  margin: 0 0 4px;
+  font-size: clamp(22px, 4vw, 30px);
+  font-weight: 700;
+  text-align: center;
+  outline: none; /* primeste focusul doar ca punct de plecare */
+}
+
+/* harta un pic mai mica decat pe pagina */
+.add-dialog .mood-map { width: min(440px, 76vw, 50dvh); }
+
+.add-dialog__weather {
+  min-height: 26px;
+  margin: 4px 0 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.add-dialog__error {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--radius-control);
+  background: var(--danger-bg);
+  color: var(--danger);
+  font-size: 14px;
+}
+
+.add-dialog__actions {
+  display: flex;
+  gap: 10px;
+}
+.add-dialog__cancel,
+.add-dialog__save {
+  min-width: 130px;
+  padding: 12px 20px;
+  border-radius: var(--radius-control);
+  font: 600 15px var(--font);
+  cursor: pointer;
+  transition: background var(--dur-fast) ease;
+}
+.add-dialog__cancel {
+  border: 1px solid rgba(37, 33, 63, 0.18);
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--ink);
+}
+.add-dialog__cancel:hover { background: #fff; }
+.add-dialog__save {
+  border: 0;
+  background: var(--action);
+  color: #fff;
+}
+.add-dialog__save:hover:not(:disabled) { background: var(--action-hover); }
+.add-dialog__save:disabled { opacity: 0.45; cursor: default; }
+.add-dialog__cancel:focus-visible,
+.add-dialog__save:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .add-dialog[open], .add-dialog[open]::backdrop { animation: none; }
+}

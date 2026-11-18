@@ -27,8 +27,10 @@ export default function LanguageProvider({ children }: { children: ReactNode }) 
     }
   }
 
-  function t(key: TextKey) {
-    return TEXTS[lang][key];
+  // daca un text lipseste (ex. dupa o schimbare de fisier in timp ce ruleaza aplicatia),
+  // aratam varianta in engleza sau macar cheia, nu blocam toata pagina
+  function t(key: TextKey): string {
+    return TEXTS[lang][key] ?? en[key] ?? key;
   }
 
   return (

@@ -89,9 +89,8 @@ export default function CheckInPage({ today, onSaved }: Props) {
       <div className="checkin__footer" aria-live="polite">
         <p className="checkin__weather">{weather ? t(WEATHER_TEXT[weather]) : ''}</p>
 
-        {saved ? (
-          <p className="checkin__saved">{t('checkin.saved')}</p>
-        ) : (
+        {/* dupa salvare butonul dispare; multumirea apare peste ecran (ThankYou, din Shell) */}
+        {!saved && (
           <button type="button" className="checkin__save" disabled={!point || saving} onClick={handleSave}>
             {saving ? t('checkin.saving') : t('checkin.save')}
           </button>

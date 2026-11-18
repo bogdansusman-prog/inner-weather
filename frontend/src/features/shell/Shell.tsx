@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { getMe } from '../../api/auth';
-import { getCheckIns, startOfToday, type CheckIn } from '../../api/checkins';
+import { getCheckIns, startOfToday, type CheckIn, type Weather } from '../../api/checkins';
 import { ApiError } from '../../api/client';
 import { useLanguage } from '../../i18n/LanguageContext';
 import type { TextKey } from '../../i18n/en';
 import Stars from '../../sky/Stars';
 import CheckInPage from '../checkin/CheckInPage';
+import ThankYou from '../checkin/ThankYou';
+import HomePage from '../home/HomePage';
 import Comet from './Comet';
 import TopBar from './TopBar';
 import { PAGE_MS, usePageNav } from './usePageNav';
@@ -21,8 +23,10 @@ const PAGES: { id: string; label: TextKey }[] = [
 const CHECKIN = 0;
 const HOME = 1;
 
-// dupa check-in-ul zilnic, cat ramane "Saved" pe ecran inainte sa mergem pe Home
+// dupa check-in-ul zilnic, cat asteptam inainte sa mergem pe Home
 const AFTER_SAVE_MS = 1400;
+// cat sta multumirea pe ecran; ramane si cat trecem pe Home
+const THANKS_MS = 3000;
 
 // cate milisecunde mai sunt pana la miezul noptii
 function msUntilMidnight() {
@@ -100,13 +104,22 @@ type PagesProps = {
 function ShellPages({ name, today, onCheckedIn, onLogout }: PagesProps) {
   const { t } = useLanguage();
   const { index, goTo, handlers } = usePageNav(PAGES.length, today ? HOME : CHECKIN);
+  // vremea check-in-ului zilnic abia salvat: cat timp e setata, aratam multumirea
+  const [thanks, setThanks] = useState<Weather | null>(null);
 
-  // dupa check-in-ul zilnic: "Saved" cateva clipe, apoi mergem singuri pe Home
+  // dupa check-in-ul zilnic: multumirea apare, iar dupa cateva clipe mergem singuri pe Home
   function handleSaved(checkIn: CheckIn) {
+    setThanks(checkIn.weather);
+    window.setTimeout(() => setThanks(null), THANKS_MS);
     window.setTimeout(() => {
       onCheckedIn(checkIn);
       goTo(HOME);
     }, AFTER_SAVE_MS);
+  }
+
+  // un check-in adaugat din Home: daca e primul de azi, el e cel zilnic
+  function handleAdded(checkIn: CheckIn) {
+    if (!today) onCheckedIn(checkIn);
   }
 
   return (
@@ -147,12 +160,17 @@ function ShellPages({ name, today, onCheckedIn, onLogout }: PagesProps) {
             {page.id === 'checkin' ? (
               // key: o zi noua (sau un check-in nou) porneste pagina de la zero
               <CheckInPage key={today?.id ?? 'open'} today={today} onSaved={handleSaved} />
+            ) : page.id === 'home' ? (
+              // key: dupa check-in-ul zilnic, Home se reincarca cu el
+              <HomePage key={today?.id ?? 'open'} name={name} onAdded={handleAdded} />
             ) : (
               <h2 className="shell__placeholder">{t(page.label)}</h2>
             )}
           </section>
         ))}
       </div>
+
+      {thanks && <ThankYou weather={thanks} durationMs={THANKS_MS} />}
     </div>
   );
 }

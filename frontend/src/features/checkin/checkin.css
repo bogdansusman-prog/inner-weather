@@ -64,16 +64,6 @@
 .checkin__save:disabled { opacity: 0.45; cursor: default; }
 .checkin__save:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
 
-.checkin__saved {
-  margin: 0;
-  padding: 10px 16px;
-  border-radius: var(--radius-control);
-  background: rgba(255, 255, 255, 0.7);
-  font-size: 15px;
-  animation: checkin-pop 260ms var(--ease-soft) both;
-}
-@keyframes checkin-pop { from { scale: 0.92; opacity: 0; } }
-
 .checkin__error {
   margin: 0;
   padding: 10px 12px;
@@ -85,5 +75,4 @@
 
 @media (prefers-reduced-motion: reduce) {
   .checkin__sky { transition: none; }
-  .checkin__saved { animation: none; }
 }
