@@ -1,6 +1,7 @@
 // Clientul pentru API-ul backend-ului. Toate cererile trec prin aici.
 
 const TOKEN_KEY = 'inner-weather:token';
+const REFRESH_KEY = 'inner-weather:refresh';
 
 export function getToken(): string | null {
   try {
@@ -16,6 +17,23 @@ export function setToken(token: string | null) {
     else localStorage.removeItem(TOKEN_KEY);
   } catch {
     // fara localStorage: utilizatorul ramane logat doar pana la refresh
+  }
+}
+
+export function getRefreshToken(): string | null {
+  try {
+    return localStorage.getItem(REFRESH_KEY);
+  } catch {
+    return null;
+  }
+}
+
+export function setRefreshToken(token: string | null) {
+  try {
+    if (token) localStorage.setItem(REFRESH_KEY, token);
+    else localStorage.removeItem(REFRESH_KEY);
+  } catch {
+    // fara localStorage: nu avem ce salva
   }
 }
 
