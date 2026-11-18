@@ -16,3 +16,7 @@ server:
   error:
     include-message: always
     include-stacktrace: never
+
+journal:
+  encryption:
+    key: M/N79V/NjFQ4Q+C2HjKTtWzfLBe/q7gDZnJOC2klCFs=
