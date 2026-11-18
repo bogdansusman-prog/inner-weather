@@ -21,6 +21,18 @@ export function saveCheckIn(energy: number, pleasantness: number) {
   });
 }
 
+// Check-in-urile de la `from` pana acum, cele mai vechi primele
+export function getCheckIns(from: Date) {
+  return apiFetch<CheckIn[]>(`/check-ins?from=${encodeURIComponent(from.toISOString())}`);
+}
+
+// Azi, la 00:00, dupa ceasul calculatorului (ora Romaniei pentru noi)
+export function startOfToday() {
+  const date = new Date();
+  date.setHours(0, 0, 0, 0);
+  return date;
+}
+
 // Aceeasi regula ca in backend, ca sa aratam vremea inainte de salvare
 export function weatherOf(energy: number, pleasantness: number): Weather {
   if (energy >= 0) return pleasantness >= 0 ? 'SUNNY' : 'STORMY';

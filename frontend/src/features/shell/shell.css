@@ -1,19 +1,74 @@
 /* Scheletul aplicatiei de dupa login: pagini intregi, una sub alta.
    Nu derulam pagina: mutam toata banda cu cate un ecran (vezi usePageNav.ts),
    ca sa putem alege noi cat dureaza trecerea. */
+
+/* culorile cerului, inregistrate ca sa se poata schimba lin (ca in intro) */
+@property --shell-a { syntax: '<color>'; inherits: true; initial-value: #8fb8e8; }
+@property --shell-b { syntax: '<color>'; inherits: true; initial-value: #c5d3f0; }
+@property --shell-c { syntax: '<color>'; inherits: true; initial-value: #f1edf6; }
+
 .shell {
   position: fixed;
   inset: 0;
   overflow: hidden;
   overflow: clip; /* nici focusul nu are voie sa deruleze scena */
-  background: var(--sky-home);
+  background: #f1edf6;
   color: var(--ink);
   font-family: var(--font);
-  color-scheme: light;
+  color-scheme: dark; /* ca in intro: Opera GX & co. nu mai intuneca singure culorile */
+
+  /* ziua (Home), ca la finalul intro-ului */
+  --shell-a: #8fb8e8;
+  --shell-b: #c5d3f0;
+  --shell-c: #f1edf6;
+  transition: --shell-a 1s ease, --shell-b 1s ease, --shell-c 1s ease, color 1s ease;
+}
+
+/* cerul fiecarei pagini: o zi intreaga, de la zori la seara */
+.shell[data-page='checkin'] { --shell-a: #9fb5e6; --shell-b: #f2c9d6; --shell-c: #ffe6c4; } /* zori */
+.shell[data-page='home']    { --shell-a: #8fb8e8; --shell-b: #c5d3f0; --shell-c: #f1edf6; } /* zi senina */
+.shell[data-page='history'] { --shell-a: #a99be0; --shell-b: #f2b6c4; --shell-c: #ffd6a8; } /* apus */
+.shell[data-page='games']   { --shell-a: #0e0b26; --shell-b: #241d5c; --shell-c: #4a3f8f; color: #f3f0f8; } /* seara */
+
+.shell__sky {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(180deg, var(--shell-a) 0%, var(--shell-b) 58%, var(--shell-c) 100%);
+  /* cand apare aplicatia, cerul porneste din ziua de la finalul intro-ului */
+  animation: shell-sky-in 1s ease both;
+}
+@keyframes shell-sky-in { from { --shell-a: #8fb8e8; --shell-b: #c5d3f0; --shell-c: #f1edf6; } }
+
+/* stelele apar doar seara */
+.shell__stars {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+.shell[data-page='games'] .shell__stars { opacity: 1; }
+
+/* seara: panourile de sticla se intuneca si ele, ca textul sa ramana citibil */
+.shell[data-page='games'] .shell__chapters { border-color: rgba(255, 255, 255, 0.22); background: rgba(255, 255, 255, 0.1); }
+.shell[data-page='games'] .shell__chapter { color: #d9d4f2; }
+.shell[data-page='games'] .shell__chapter:hover { background: rgba(255, 255, 255, 0.14); color: #fff; }
+.shell[data-page='games'] .shell__chapter[aria-current='true'] { background: #f3f0f8; color: var(--action); }
+
+/* cometa: un canvas peste cer, sub pagini */
+.shell__comet {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 
 /* banda cu paginile; durata vine din Shell.tsx (PAGE_MS) */
 .shell__track {
+  position: relative;
+  z-index: 1;
   transition-property: translate;
   transition-timing-function: cubic-bezier(0.65, 0, 0.35, 1); /* porneste lin, se opreste lin */
   will-change: translate;
@@ -21,7 +76,7 @@
 
 .shell__page {
   position: relative;
-  isolation: isolate; /* fundalul unei pagini (ex. cerul de la check-in) sta in spatele continutului ei */
+  isolation: isolate; /* fundalul unei pagini (ex. lumina de la check-in) sta in spatele continutului ei */
   height: 100dvh;
   overflow-y: auto; /* o pagina mai inalta decat ecranul se deruleaza in ea */
   display: grid;
@@ -96,5 +151,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .shell, .shell__stars { transition: none; }
+  .shell__sky { animation: none; }
   .shell__track { transition: none; }
 }

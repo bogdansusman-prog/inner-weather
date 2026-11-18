@@ -10,7 +10,7 @@ export const en = {
   'menu.logout': 'Log out',
   'menu.open': 'Open profile menu',
   'menu.signedIn': 'Signed in as',
-    'checkin.question': "How's your weather?",
+  'checkin.question': "How's your weather?",
   'checkin.hint': 'Tap the spot that matches how you feel right now.',
   'checkin.mapLabel': 'Mood map. Use the arrow keys to move your point.',
   'checkin.save': 'Save',
@@ -24,6 +24,8 @@ export const en = {
   'weather.stormy': 'Stormy',
   'weather.calm': 'Calm',
   'weather.foggy': 'Foggy',
+  'checkin.doneTitle': "You've checked in today",
+  'checkin.doneHint': 'Feeling different later? Add another check-in from Home.',
 } as const;
 
 // toate cheile posibile: 'nav.checkin' | 'nav.home' | ...

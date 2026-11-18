@@ -25,9 +25,9 @@ function canScrollInside(target: EventTarget | null, direction: 1 | -1, root: El
 
 // Navigarea pe pagini intregi: rotita, degetul, tastele si click pe capitole.
 // O miscare = o pagina; cat dureaza trecerea, miscarile urmatoare sunt ignorate.
-export function usePageNav(count: number) {
-  const [index, setIndex] = useState(0);
-  const indexRef = useRef(0);   // aceeasi valoare, citita din handler-e
+export function usePageNav(count: number, initialIndex = 0) {
+  const [index, setIndex] = useState(initialIndex);
+  const indexRef = useRef(initialIndex);   // aceeasi valoare, citita din handler-e
   const lockedUntil = useRef(0); // pana cand ignoram miscarile
   const touchStartY = useRef<number | null>(null);
 

@@ -3,6 +3,7 @@ import RegisterCard from '../auth/RegisterCard';
 import Stars from '../../sky/Stars';
 import Clouds from '../../sky/Clouds';
 import Rain from '../../sky/Rain';
+import CometTail from '../../sky/CometTail';
 import LoginCard from '../auth/LoginCard';
 import { journeyKeyframes } from './journeyPath';
 import './intro.css';
@@ -226,6 +227,8 @@ export default function Intro({ onLoggedIn }: Props) {
       )}
 
       {/* Punctul (tu): cade, respira, urca, traverseaza harta si devine cardul de login */}
+      {/* coada de cometa care urmareste punctul */}
+      <CometTail target={dotRef} className="intro__tail" />
       <span className="intro__drop" ref={dotRef} />
 
       {/* Actul 4: cardul de login creste din punct */}

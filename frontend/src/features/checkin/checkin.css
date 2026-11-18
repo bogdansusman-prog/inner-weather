@@ -1,24 +1,25 @@
-/* Pagina de check-in: harta starilor pe care alegi unde te simti. */
+/* Pagina de check-in: intrebarea, harta pe cer si butonul de salvare. */
 .checkin {
-  width: min(560px, 100%);
+  width: min(600px, 100%);
   display: grid;
   justify-items: center;
   gap: 14px;
   text-align: center;
 }
 
-/* cerul paginii ia culoarea vremii alese */
+/* o lumina discreta in coltul vremii alese */
 .checkin__sky {
   position: absolute;
   inset: 0;
   z-index: -1;
   opacity: 0;
-  transition: opacity 600ms ease, background 600ms ease;
+  transition: opacity 600ms ease;
+  pointer-events: none;
 }
-.checkin[data-weather='SUNNY'] .checkin__sky  { opacity: 1; background: radial-gradient(circle at 75% 15%, rgba(255, 214, 120, 0.55), transparent 60%); }
-.checkin[data-weather='CALM'] .checkin__sky   { opacity: 1; background: radial-gradient(circle at 75% 85%, rgba(125, 220, 192, 0.45), transparent 60%); }
-.checkin[data-weather='FOGGY'] .checkin__sky  { opacity: 1; background: radial-gradient(circle at 25% 85%, rgba(176, 182, 196, 0.55), transparent 60%); }
-.checkin[data-weather='STORMY'] .checkin__sky { opacity: 1; background: radial-gradient(circle at 25% 15%, rgba(110, 96, 170, 0.5), transparent 60%); }
+.checkin[data-weather='SUNNY'] .checkin__sky  { opacity: 1; background: radial-gradient(circle at 72% 28%, rgba(255, 214, 120, 0.45), transparent 55%); }
+.checkin[data-weather='CALM'] .checkin__sky   { opacity: 1; background: radial-gradient(circle at 72% 72%, rgba(125, 220, 192, 0.4), transparent 55%); }
+.checkin[data-weather='FOGGY'] .checkin__sky  { opacity: 1; background: radial-gradient(circle at 28% 72%, rgba(196, 202, 214, 0.55), transparent 55%); }
+.checkin[data-weather='STORMY'] .checkin__sky { opacity: 1; background: radial-gradient(circle at 28% 28%, rgba(110, 96, 170, 0.35), transparent 55%); }
 
 .checkin__question {
   margin: 0;
@@ -27,79 +28,14 @@
   letter-spacing: -0.01em;
 }
 .checkin__hint {
-  margin: -6px 0 6px;
+  margin: -6px 0 14px;
   color: var(--ink-soft);
   font-size: 15px;
 }
 
-/* harta: patrat de sticla mata, cu patru zone colorate discret */
-.checkin__map {
-  position: relative;
-  width: min(440px, 78vw, 52dvh);
-  aspect-ratio: 1;
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  border-radius: var(--radius-card);
-  background:
-    linear-gradient(to right, transparent 50%, rgba(255, 200, 87, 0.14) 50%) top / 100% 50% no-repeat,
-    linear-gradient(to right, rgba(110, 96, 170, 0.12) 50%, transparent 50%) top / 100% 50% no-repeat,
-    linear-gradient(to right, rgba(176, 182, 196, 0.16) 50%, rgba(125, 220, 192, 0.14) 50%) bottom / 100% 50% no-repeat,
-    rgba(255, 255, 255, 0.55);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 20px 50px rgba(37, 33, 63, 0.12);
-  cursor: crosshair;
-  touch-action: none; /* tragerea cu degetul muta punctul, nu pagina */
-  user-select: none;
-}
-.checkin__map:focus-visible { outline: 3px solid var(--violet); outline-offset: 4px; }
-
-.checkin__axis { position: absolute; background: rgba(37, 33, 63, 0.28); }
-.checkin__axis--x { left: 6%; right: 6%; top: 50%; height: 1.5px; }
-.checkin__axis--y { top: 6%; bottom: 6%; left: 50%; width: 1.5px; }
-
-.checkin__label {
-  position: absolute;
-  color: var(--ink-soft);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-.checkin__label--energy { top: 8px; left: 50%; translate: 8px 0; }
-.checkin__label--pleasant { right: 10px; top: 50%; translate: 0 6px; }
-
-.checkin__word {
-  position: absolute;
-  padding: 4px 10px;
-  border-radius: var(--radius-pill);
-  color: var(--ink-soft);
-  font-size: 14px;
-  font-weight: 600;
-  transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
-}
-.checkin__word--stormy { left: 12%; top: 18%; }
-.checkin__word--sunny  { right: 12%; top: 18%; }
-.checkin__word--foggy  { left: 12%; bottom: 18%; }
-.checkin__word--calm   { right: 12%; bottom: 18%; }
-.checkin__word[data-active='true'] { background: var(--action); color: #fff; }
-
-/* punctul: tu */
-.checkin__dot {
-  position: absolute;
-  width: 22px;
-  height: 22px;
-  translate: -50% -50%;
-  border: 3px solid #fff;
-  border-radius: 50%;
-  background: var(--action);
-  box-shadow: 0 0 0 6px rgba(108, 92, 231, 0.2), 0 6px 16px rgba(37, 33, 63, 0.3);
-  pointer-events: none;
-  animation: dot-in 220ms var(--ease-soft) both;
-}
-@keyframes dot-in { from { scale: 0.4; opacity: 0; } }
-
 .checkin__footer {
-  min-height: 96px;
+  min-height: 92px;
+  margin-top: 6px;
   display: grid;
   justify-items: center;
   align-content: start;
@@ -111,6 +47,8 @@
   font-size: 20px;
   font-weight: 600;
 }
+.checkin__time { color: var(--ink-soft); font-weight: 500; }
+
 .checkin__save {
   min-width: 180px;
   padding: 13px 28px;
@@ -130,10 +68,12 @@
   margin: 0;
   padding: 10px 16px;
   border-radius: var(--radius-control);
-  background: rgba(125, 220, 192, 0.25);
+  background: rgba(255, 255, 255, 0.7);
   font-size: 15px;
-  animation: dot-in 260ms var(--ease-soft) both;
+  animation: checkin-pop 260ms var(--ease-soft) both;
 }
+@keyframes checkin-pop { from { scale: 0.92; opacity: 0; } }
+
 .checkin__error {
   margin: 0;
   padding: 10px 12px;
@@ -144,6 +84,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .checkin__sky, .checkin__word { transition: none; }
-  .checkin__dot, .checkin__saved { animation: none; }
+  .checkin__sky { transition: none; }
+  .checkin__saved { animation: none; }
 }

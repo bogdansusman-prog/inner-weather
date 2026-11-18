@@ -1,0 +1,115 @@
+/* Harta starilor direct pe cer, ca in intro: axe albe cu sageti, etichete-pastila. */
+.mood-map {
+  position: relative;
+  width: min(540px, 84vw, 54dvh);
+  aspect-ratio: 1;
+  border-radius: 32px;
+  touch-action: none; /* tragerea cu degetul muta punctul, nu pagina */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* zona pe care se poate apasa: un contur discret, mai vizibil la hover */
+.mood-map[data-interactive='true'] { cursor: crosshair; }
+.mood-map[data-interactive='true']::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1.5px dashed rgba(255, 255, 255, 0.55);
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0.06);
+  transition: background var(--dur-fast) ease, border-color var(--dur-fast) ease;
+}
+.mood-map[data-interactive='true']:hover::before {
+  border-color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.14);
+}
+.mood-map:focus-visible { outline: 3px solid var(--violet); outline-offset: 6px; }
+
+/* axele: linii albe cu sageti la capat */
+.mood-map__axis {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 0 6px rgba(37, 33, 63, 0.12);
+}
+.mood-map__axis--x { left: 5%; right: 6%; top: 50%; height: 2px; translate: 0 -1px; }
+.mood-map__axis--y { top: 6%; bottom: 5%; left: 50%; width: 2px; translate: -1px 0; }
+.mood-map__axis::after {
+  content: '';
+  position: absolute;
+  border: 6px solid transparent;
+}
+.mood-map__axis--x::after { right: -10px; top: 50%; translate: 0 -50%; border-left: 10px solid rgba(255, 255, 255, 0.92); border-right: 0; }
+.mood-map__axis--y::after { top: -10px; left: 50%; translate: -50% 0; border-bottom: 10px solid rgba(255, 255, 255, 0.92); border-top: 0; }
+
+/* numele axelor: pastile inchise, ca in intro */
+.mood-map__label {
+  position: absolute;
+  padding: 3px 9px;
+  border-radius: var(--radius-pill);
+  background: rgba(37, 33, 63, 0.62);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.mood-map__label--energy { top: 0; left: 50%; translate: -50% -60%; }
+.mood-map__label--pleasant { right: 0; top: 50%; translate: 4px calc(-100% - 10px); }
+
+/* cele patru vremi */
+.mood-map__word {
+  position: absolute;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.62);
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  pointer-events: none;
+  transition: background var(--dur-fast) ease, color var(--dur-fast) ease, scale var(--dur-fast) var(--ease-soft);
+}
+.mood-map__word--stormy { left: 13%; top: 22%; }
+.mood-map__word--sunny  { right: 13%; top: 22%; }
+.mood-map__word--foggy  { left: 13%; bottom: 22%; }
+.mood-map__word--calm   { right: 13%; bottom: 22%; }
+.mood-map__word[data-active='true'] { background: var(--action); color: #fff; scale: 1.06; }
+
+/* punctul: o lumina mica, ca punctul din intro */
+.mood-map__dot {
+  position: absolute;
+  z-index: 1;
+  width: 18px;
+  height: 18px;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #fff 0%, #e7e3ff 40%, var(--lilac) 100%);
+  box-shadow:
+    0 0 0 5px rgba(162, 155, 254, 0.35),
+    0 0 22px 6px rgba(108, 92, 231, 0.55);
+  pointer-events: none;
+  animation: mood-dot-in 220ms var(--ease-soft) both;
+}
+@keyframes mood-dot-in { from { scale: 0.3; opacity: 0; } }
+
+/* "fantoma" de sub mouse: arata unde ar ajunge punctul */
+.mood-map__dot--ghost {
+  opacity: 0.35;
+  box-shadow: none;
+  animation: none;
+}
+
+@media (max-width: 640px) {
+  .mood-map__word { padding: 5px 10px; font-size: 11px; letter-spacing: 0.1em; }
+  .mood-map__word--stormy, .mood-map__word--foggy { left: 6%; }
+  .mood-map__word--sunny, .mood-map__word--calm { right: 6%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mood-map__word { transition: none; }
+  .mood-map__dot { animation: none; }
+}

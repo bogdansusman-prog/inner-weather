@@ -12,7 +12,7 @@ export const ro: Record<TextKey, string> = {
   'menu.logout': 'Ieșire din cont',
     'menu.open': 'Deschide meniul de profil',
   'menu.signedIn': 'Conectat ca',
-    'checkin.question': 'Cum e vremea ta?',
+  'checkin.question': 'Cum e vremea ta?',
   'checkin.hint': 'Atinge locul care se potrivește cu cum te simți acum.',
   'checkin.mapLabel': 'Harta stărilor. Folosește săgețile ca să muți punctul.',
   'checkin.save': 'Salvează',
@@ -26,4 +26,6 @@ export const ro: Record<TextKey, string> = {
   'weather.stormy': 'Furtună',
   'weather.calm': 'Calm',
   'weather.foggy': 'Ceață',
+  'checkin.doneTitle': 'Ai făcut check-in azi',
+  'checkin.doneHint': 'Te simți altfel mai târziu? Adaugă încă un check-in din Acasă.',
 };
