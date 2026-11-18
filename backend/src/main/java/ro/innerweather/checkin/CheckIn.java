@@ -32,6 +32,9 @@ public class CheckIn {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(length = 500)
+    private String note;
+
     @Column(nullable = false)
     private double energy;
 
