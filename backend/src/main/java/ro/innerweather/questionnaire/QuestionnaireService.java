@@ -1,18 +1,23 @@
 package ro.innerweather.questionnaire;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ro.innerweather.common.ApiException;
+import ro.innerweather.therapist.TherapistClientLinkRepository;
+import ro.innerweather.therapist.LinkStatus;
 
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class QuestionnaireService {
 
     private final QuestionnaireRepository repository;
+    private final TherapistClientLinkRepository linkRepository;
 
     @Transactional
     public QuestionnaireResponseDto submit(UUID userId, QuestionnaireRequest request) {
@@ -41,7 +46,17 @@ public class QuestionnaireService {
         response.setScore(score);
         response.setSeverity(severity);
 
-        return QuestionnaireResponseDto.from(repository.save(response));
+        QuestionnaireResponse saved = repository.save(response);
+
+        // PHQ-9 intrebarea 9 (autovatamare)
+        if (request.type() == QuestionnaireType.PHQ9 && answers.get(8) > 0) {
+            linkRepository.findByClientIdAndStatus(userId, LinkStatus.ACCEPTED)
+                    .ifPresent(link -> log.warn(
+                            "SUPPORT_NEEDED: user={} therapist={} phq9_q9={}",
+                            userId, link.getTherapistId(), answers.get(8)));
+        }
+
+        return QuestionnaireResponseDto.from(saved);
     }
 
     @Transactional(readOnly = true)
@@ -61,7 +76,7 @@ public class QuestionnaireService {
             if (score <= 14) return Severity.MODERATE;
             if (score <= 19) return Severity.MODERATELY_SEVERE;
             return Severity.SEVERE;
-        } else { // GAD7
+        } else {
             if (score <= 4)  return Severity.MINIMAL;
             if (score <= 9)  return Severity.MILD;
             if (score <= 14) return Severity.MODERATE;
