@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
 import SettingsDialog from '../settings/SettingsDialog';
+import TalkDialog from '../talk/TalkDialog';
 import './topbar.css';
 
 type Props = {
@@ -13,6 +14,7 @@ export default function TopBar({ name, email, onLogout }: Props) {
   const { t } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [talkOpen, setTalkOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
 
   // meniul se inchide la Escape sau la click oriunde in afara lui
@@ -39,8 +41,7 @@ export default function TopBar({ name, email, onLogout }: Props) {
 
   return (
     <header className="topbar">
-      {/* TODO: pop-up-ul "I need to talk" vine la pasul urmator */}
-      <button type="button" className="topbar__talk">
+      <button type="button" className="topbar__talk" aria-haspopup="dialog" onClick={() => setTalkOpen(true)}>
         {t('bar.talk')}
       </button>
 
@@ -90,6 +91,7 @@ export default function TopBar({ name, email, onLogout }: Props) {
         )}
       </div>
 
+      <TalkDialog open={talkOpen} onClose={() => setTalkOpen(false)} />
       <SettingsDialog open={settingsOpen} onClose={() => setSettingsOpen(false)} name={name} email={email} />
     </header>
   );

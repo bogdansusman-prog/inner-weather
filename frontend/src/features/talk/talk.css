@@ -1,0 +1,184 @@
+/* Fereastra "I need to talk": calma, fara graba, fara rosu. */
+.talk {
+  width: min(480px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px);
+  padding: 0;
+  border: 0;
+  border-radius: 28px;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font);
+  overflow: visible;
+}
+.talk::backdrop {
+  background: rgba(22, 18, 58, 0.5);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.talk[open]::backdrop { animation: talk-fade 400ms ease both; }
+@keyframes talk-fade { from { opacity: 0; } }
+
+.talk__card {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  max-height: calc(100dvh - 24px);
+  overflow: hidden auto;
+  padding: 34px 28px 24px;
+  border-radius: inherit;
+  background: var(--surface-strong);
+  box-shadow: 0 30px 80px rgba(22, 18, 58, 0.35);
+  /* fiecare pas intra incet, de jos */
+  animation: talk-in 420ms var(--ease-soft) both;
+}
+@keyframes talk-in { from { opacity: 0; translate: 0 12px; } }
+
+/* o lumina lila care "respira" incet in colt */
+.talk__glow {
+  position: absolute;
+  top: -90px;
+  right: -90px;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(162, 155, 254, 0.45), transparent 70%);
+  pointer-events: none;
+  animation: talk-breathe 6s ease-in-out infinite;
+}
+@keyframes talk-breathe {
+  0%, 100% { scale: 0.9; opacity: 0.7; }
+  50% { scale: 1.1; opacity: 1; }
+}
+
+.talk__title {
+  position: relative;
+  margin: 0;
+  font-size: clamp(22px, 4vw, 28px);
+  font-weight: 700;
+  line-height: 1.25;
+  outline: none; /* primeste focusul doar ca punct de plecare */
+}
+.talk__hint {
+  margin: -4px 0 4px;
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* butoanele */
+.talk__answers { display: grid; gap: 10px; margin-top: 6px; }
+.talk__button {
+  display: grid;
+  place-items: center;
+  min-height: 48px;
+  padding: 10px 16px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--ink);
+  font: 600 15px var(--font);
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) ease, background var(--dur-fast) ease, transform var(--dur-fast) var(--ease-soft);
+}
+.talk__button:hover { border-color: var(--lilac); }
+.talk__button:active { transform: scale(0.97); }
+.talk__button--main {
+  border-color: transparent;
+  background: var(--action);
+  color: #fff;
+}
+.talk__button--main:hover { border-color: transparent; background: var(--action-hover); }
+.talk__button--quiet { border-color: transparent; background: none; color: var(--ink-soft); }
+.talk__button--quiet:hover { border-color: transparent; color: var(--ink); }
+
+/* mesajul catre cineva drag */
+.talk__label {
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.talk__message {
+  margin-top: -6px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--ink);
+  font: 400 15px/1.5 var(--font);
+  resize: vertical;
+}
+.talk__message:focus { border-color: var(--violet); outline: none; }
+.talk__channels {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+/* urgenta: vizibila, dar fara alarma */
+.talk__emergency {
+  padding: 14px 16px;
+  border-radius: var(--radius-control);
+  background: var(--selected);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.talk__emergency:hover { text-decoration: underline; }
+
+/* liniile de sprijin: cate un card care suna la apasare */
+.talk__lines { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.talk__line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--ink);
+  text-decoration: none;
+  transition: border-color var(--dur-fast) ease;
+}
+.talk__line:hover { border-color: var(--lilac); }
+.talk__line strong { display: block; font-size: 15px; }
+.talk__about { color: var(--ink-soft); font-size: 13px; }
+.talk__number {
+  flex: none;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* link-urile discrete de jos */
+.talk__footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 4px;
+}
+.talk__link {
+  padding: 6px 0;
+  border: 0;
+  background: none;
+  color: var(--ink-soft);
+  font: 500 14px var(--font);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.talk__link:hover { color: var(--ink); }
+.talk__directory { justify-self: start; }
+
+.talk :is(.talk__button, .talk__link, .talk__line, .talk__emergency):focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .talk__card, .talk__glow, .talk[open]::backdrop { animation: none; }
+}
