@@ -52,7 +52,7 @@
 /* seara: panourile de sticla se intuneca si ele, ca textul sa ramana citibil */
 .shell[data-page='games'] .shell__chapters { border-color: rgba(255, 255, 255, 0.22); background: rgba(255, 255, 255, 0.1); }
 .shell[data-page='games'] .shell__chapter { color: #d9d4f2; }
-.shell[data-page='games'] .shell__chapter:hover { background: rgba(255, 255, 255, 0.14); color: #fff; }
+@media (hover: hover) { .shell[data-page='games'] .shell__chapter:hover { background: rgba(255, 255, 255, 0.14); color: #fff; } }
 .shell[data-page='games'] .shell__chapter[aria-current='true'] { background: #f3f0f8; color: var(--action); }
 
 /* cometa: un canvas peste cer, sub pagini */
@@ -125,7 +125,7 @@
   cursor: pointer;
   transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
 }
-.shell__chapter:hover { background: rgba(255, 255, 255, 0.7); color: var(--ink); }
+@media (hover: hover) { .shell__chapter:hover { background: rgba(255, 255, 255, 0.7); color: var(--ink); } }
 .shell__chapter:focus-visible { outline: 2px solid var(--violet); outline-offset: 1px; }
 
 /* capitolul paginii pe care esti acum */

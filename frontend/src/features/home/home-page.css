@@ -110,7 +110,7 @@
   cursor: pointer;
   transition: background var(--dur-fast) ease, transform var(--dur-fast) var(--ease-soft);
 }
-.home-page__add:hover { background: var(--action-hover); transform: translateY(-1px); }
+@media (hover: hover) { .home-page__add:hover { background: var(--action-hover); transform: translateY(-1px); } }
 .home-page__add:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
 
 /* ultimele 7 zile: cate o bulina pe zi */

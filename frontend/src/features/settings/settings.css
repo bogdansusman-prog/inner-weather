@@ -65,7 +65,7 @@
   cursor: pointer;
   transition: border-color var(--dur-fast) ease, background var(--dur-fast) ease, transform var(--dur-fast) var(--ease-soft);
 }
-.settings__option:hover { border-color: var(--lilac); }
+@media (hover: hover) { .settings__option:hover { border-color: var(--lilac); } }
 .settings__option:active { transform: scale(0.97); }
 .settings__option:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
 /* optiunea aleasa */
@@ -158,10 +158,64 @@
   cursor: pointer;
   transition: background var(--dur-fast) ease;
 }
-.settings__done:hover { background: var(--action-hover); }
+@media (hover: hover) { .settings__done:hover { background: var(--action-hover); } }
 .settings__done:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
 
 @media (prefers-reduced-motion: reduce) {
   .settings[open], .settings[open]::backdrop { animation: none; }
   .settings__option { transition: none; }
 }
+
+/* ---------- Avatarul ---------- */
+.picker {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 14px;
+  border-radius: var(--radius-control);
+  background: var(--surface);
+}
+.picker__preview {
+  flex: none;
+  width: 72px;
+  height: 72px;
+  font-size: 28px; /* marimea initialei */
+}
+.picker__choices { display: grid; gap: 10px; min-width: 0; }
+.picker__row { display: flex; flex-wrap: wrap; gap: 6px; }
+.picker__option {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1.5px solid var(--line);
+  border-radius: 50%;
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color var(--dur-fast) ease, transform var(--dur-fast) var(--ease-soft);
+}
+.picker__option .avatar__icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.picker__option .avatar__art { width: 30px; height: 30px; }
+.picker__option .avatar__img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+.picker__option { overflow: hidden; }
+@media (hover: hover) { .picker__option:hover { border-color: var(--lilac); } }
+.picker__option:active { transform: scale(0.92); }
+.picker__option:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+/* optiunea aleasa: un inel mov */
+.picker__option[aria-pressed='true'] { border-color: var(--violet); box-shadow: 0 0 0 2px var(--violet); }
+/* culorile: cercul plin, cu aceleasi culori ca avatarul */
+.picker__color { border-color: transparent; background: var(--avatar-bg); }
+.picker__reset {
+  justify-self: start;
+  padding: 2px 0;
+  border: 0;
+  background: none;
+  color: var(--ink-soft);
+  font: 500 13px var(--font);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+@media (hover: hover) { .picker__reset:hover { color: var(--ink); } }

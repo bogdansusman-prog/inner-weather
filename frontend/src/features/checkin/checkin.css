@@ -60,7 +60,7 @@
   cursor: pointer;
   transition: background var(--dur-fast) ease, transform var(--dur-fast) var(--ease-soft);
 }
-.checkin__save:hover:not(:disabled) { background: var(--action-hover); transform: translateY(-1px); }
+@media (hover: hover) { .checkin__save:hover:not(:disabled) { background: var(--action-hover); transform: translateY(-1px); } }
 .checkin__save:disabled { opacity: 0.45; cursor: default; }
 .checkin__save:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
 

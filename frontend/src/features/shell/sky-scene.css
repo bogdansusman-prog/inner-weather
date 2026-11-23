@@ -1,0 +1,158 @@
+/* Cerul din spatele paginilor: soare / luna, nori, vremea de azi, stele cazatoare.
+   Totul se misca incet si doar prin transform / opacity, ca sa ramana fluid. */
+.scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ---------- Soarele si luna ---------- */
+/* locul lor pe cer, pentru fiecare pagina: rasare, e sus, apune, apoi vine luna */
+.scene__body {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 120px;
+  height: 120px;
+  --x: 18vw;
+  --y: 12vh;
+  translate: calc(var(--x) - 50%) calc(var(--y) - 50%);
+  transition: translate 1s cubic-bezier(0.65, 0, 0.35, 1); /* la fel ca trecerea intre pagini */
+}
+.shell[data-page='checkin'] .scene__body { --x: 12vw; --y: 78vh; } /* rasarit, jos in stanga */
+.shell[data-page='home']    .scene__body { --x: 20vw; --y: 16vh; } /* sus pe cer */
+.shell[data-page='history'] .scene__body { --x: 86vw; --y: 76vh; } /* apus, jos in dreapta */
+.shell[data-page='games']   .scene__body { --x: 82vw; --y: 16vh; } /* luna */
+
+.scene__sun,
+.scene__moon,
+.scene__rays {
+  position: absolute;
+  border-radius: 50%;
+  transition: opacity 1s ease, background 1s ease, box-shadow 1s ease;
+}
+
+.scene__sun {
+  inset: 10px;
+  background: radial-gradient(circle at 40% 38%, #fffdf2 0%, #ffe9a8 45%, #ffcf6b 100%);
+  box-shadow: 0 0 60px 20px rgba(255, 214, 120, 0.45), 0 0 140px 60px rgba(255, 214, 120, 0.2);
+}
+/* la rasarit si la apus soarele e mai portocaliu */
+.shell[data-page='checkin'] .scene__sun,
+.shell[data-page='history'] .scene__sun {
+  background: radial-gradient(circle at 40% 38%, #fff4e6 0%, #ffc59a 45%, #ff9e7a 100%);
+  box-shadow: 0 0 60px 24px rgba(255, 166, 120, 0.5), 0 0 160px 70px rgba(255, 150, 130, 0.25);
+}
+
+/* luna: o semiluna facuta din umbra unui cerc */
+.scene__moon {
+  inset: 26px;
+  opacity: 0;
+  background: transparent;
+  box-shadow: 16px -6px 0 0 #f1edff;
+  filter: drop-shadow(0 0 18px rgba(214, 208, 255, 0.7));
+}
+
+/* noaptea (Games sau tema Midnight): luna in locul soarelui */
+.shell[data-page='games'] .scene__sun,
+:root[data-theme='midnight'] .scene__sun { opacity: 0; }
+.shell[data-page='games'] .scene__moon,
+:root[data-theme='midnight'] .scene__moon { opacity: 1; }
+
+/* razele: doar cand e insorit, se rotesc foarte incet */
+.scene__rays {
+  inset: -110px;
+  opacity: 0;
+  background: repeating-conic-gradient(from 0deg, rgba(255, 236, 190, 0.5) 0deg 5deg, transparent 5deg 20deg);
+  -webkit-mask: radial-gradient(circle, #000 18%, transparent 68%);
+  mask: radial-gradient(circle, #000 18%, transparent 68%);
+  animation: scene-spin 90s linear infinite;
+}
+.scene[data-weather='SUNNY'] .scene__rays { opacity: 0.9; }
+.shell[data-page='games'] .scene__rays,
+:root[data-theme='midnight'] .scene__rays { opacity: 0; }
+@keyframes scene-spin { to { rotate: 1turn; } }
+
+/* in ceata si in furtuna soarele abia se vede */
+.scene[data-weather='FOGGY'] .scene__sun { opacity: 0.45; }
+.scene[data-weather='STORMY'] .scene__sun { opacity: 0.2; }
+
+/* ---------- Norii ---------- */
+/* straturile calatoresc incet pe orizontala, fiecare in ritmul lui (parallax) */
+.scene .clouds__layer { animation: scene-travel linear infinite alternate; }
+.scene .clouds__layer--far  { animation-duration: 140s; }
+.scene .clouds__layer--mid  { animation-duration: 95s; }
+.scene .clouds__layer--near { animation-duration: 60s; }
+@keyframes scene-travel {
+  from { translate: -6vw 0; }
+  to   { translate: 6vw 0; }
+}
+
+/* in aplicatie norii sunt mai discreti decat in intro: continutul e pe primul plan */
+.scene .clouds { opacity: 0.55; transition: opacity 1s ease; }
+.scene[data-weather='NONE'] .clouds,
+.scene[data-weather='SUNNY'] .clouds { opacity: 0.35; }
+.scene[data-weather='STORMY'] .clouds { opacity: 0.6; }
+/* norii apropiati stau mai jos, unde e continutul: ii facem si mai transparenti */
+.scene .clouds__layer--near { opacity: 0.5; }
+/* noaptea norii se pierd in intuneric */
+.shell[data-page='games'] .scene .clouds,
+:root[data-theme='midnight'] .scene .clouds { opacity: 0.1; }
+
+/* ---------- Ceata ---------- */
+.scene__mist {
+  position: absolute;
+  left: -20vw;
+  width: 140vw;
+  height: 34vh;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.55), transparent 70%);
+  filter: blur(18px);
+  animation: scene-mist 45s ease-in-out infinite alternate;
+}
+.scene__mist--low { bottom: -8vh; }
+.scene__mist--high { bottom: 22vh; opacity: 0.6; animation-duration: 60s; animation-direction: alternate-reverse; }
+@keyframes scene-mist {
+  from { translate: -8vw 0; }
+  to   { translate: 8vw 0; }
+}
+:root[data-theme='midnight'] .scene__mist,
+.shell[data-page='games'] .scene__mist { opacity: 0.2; }
+
+/* ---------- Furtuna ---------- */
+/* cerul se intuneca putin; ploaia vine din Rain.tsx (fara fulgere, ca sa nu deranjeze ochii) */
+.scene__dim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(34, 29, 88, 0.45), rgba(34, 29, 88, 0.1));
+}
+
+/* ---------- Stele cazatoare ---------- */
+.scene__meteor {
+  position: absolute;
+  width: 140px;
+  height: 2px;
+  border-radius: 1px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.95), transparent);
+  rotate: -32deg;
+  opacity: 0;
+}
+.scene__meteor--one { top: 14vh; left: 70vw; }
+.scene__meteor--two { top: 30vh; left: 38vw; }
+/* apar doar noaptea; o trecere scurta, apoi o pauza lunga */
+.shell[data-page='games'] .scene__meteor,
+:root[data-theme='midnight'] .scene__meteor { animation: scene-meteor 11s ease-in infinite; }
+.scene__meteor--two { animation-delay: 6s !important; animation-duration: 15s !important; }
+@keyframes scene-meteor {
+  0%   { opacity: 0; translate: 0 0; }
+  2%   { opacity: 1; }
+  7%   { opacity: 0; translate: -28vw 17vw; }
+  100% { opacity: 0; translate: -28vw 17vw; }
+}
+
+/* ---------- Fara miscare ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .scene__body { transition: none; }
+  .scene__rays, .scene .clouds__layer, .scene__mist, .scene__meteor { animation: none !important; }
+}

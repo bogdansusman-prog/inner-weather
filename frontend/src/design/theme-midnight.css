@@ -37,17 +37,17 @@
   background: var(--glass);
   box-shadow: 0 18px 44px rgba(0, 0, 0, 0.25);
 }
-:root[data-theme='midnight'] .shell .topbar__talk:hover { background: rgba(60, 50, 130, 0.7); }
+@media (hover: hover) { :root[data-theme='midnight'] .shell .topbar__talk:hover { background: rgba(60, 50, 130, 0.7); } }
 :root[data-theme='midnight'] .shell .topbar__menu {
   border-color: var(--glass-border);
   background: var(--surface-strong);
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
 }
-:root[data-theme='midnight'] .shell .topbar__item:hover { background: rgba(255, 255, 255, 0.08); }
+@media (hover: hover) { :root[data-theme='midnight'] .shell .topbar__item:hover { background: rgba(255, 255, 255, 0.08); } }
 
 /* capitolele din dreapta */
 :root[data-theme='midnight'] .shell .shell__chapter { color: var(--ink-soft); }
-:root[data-theme='midnight'] .shell .shell__chapter:hover { background: rgba(255, 255, 255, 0.1); color: var(--ink); }
+@media (hover: hover) { :root[data-theme='midnight'] .shell .shell__chapter:hover { background: rgba(255, 255, 255, 0.1); color: var(--ink); } }
 :root[data-theme='midnight'] .shell .shell__chapter[aria-current='true'] { background: #ece9ff; color: #2b2468; }
 
 /* casutele mici din carduri */
@@ -55,7 +55,7 @@
   border-color: var(--line);
   background: var(--surface);
 }
-:root[data-theme='midnight'] .shell .history__arrow:hover:not(:disabled) { background: rgba(255, 255, 255, 0.16); }
+@media (hover: hover) { :root[data-theme='midnight'] .shell .history__arrow:hover:not(:disabled) { background: rgba(255, 255, 255, 0.16); } }
 
 /* pe bulinele colorate (galben, verde, gri) textul ramane inchis; pe furtuna, alb */
 :root[data-theme='midnight'] .shell .history-cal__day { color: #25213f; }
@@ -84,7 +84,7 @@
 /* ferestrele: check-in in plus si multumirea */
 :root[data-theme='midnight'] .shell .add-dialog__card { background: linear-gradient(180deg, #1d1846 0%, #2b2468 100%); }
 :root[data-theme='midnight'] .shell .add-dialog__cancel { border-color: var(--line); background: var(--surface); }
-:root[data-theme='midnight'] .shell .add-dialog__cancel:hover { background: rgba(255, 255, 255, 0.16); }
+@media (hover: hover) { :root[data-theme='midnight'] .shell .add-dialog__cancel:hover { background: rgba(255, 255, 255, 0.16); } }
 :root[data-theme='midnight'] .shell .thanks__card {
   border-color: var(--glass-border);
   background: rgba(29, 24, 70, 0.88);
