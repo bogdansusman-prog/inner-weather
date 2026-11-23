@@ -1,0 +1,167 @@
+/* Fereastra de setari. */
+.settings {
+  width: min(520px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px);
+  padding: 0;
+  border: 0;
+  border-radius: 28px;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font);
+  overflow: visible;
+}
+.settings::backdrop {
+  background: rgba(22, 18, 58, 0.45);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+}
+.settings[open] { animation: settings-in 260ms var(--ease-soft) both; }
+.settings[open]::backdrop { animation: settings-fade 260ms ease both; }
+@keyframes settings-in { from { opacity: 0; transform: translateY(16px) scale(0.98); } }
+@keyframes settings-fade { from { opacity: 0; } }
+
+.settings__card {
+  display: grid;
+  gap: 22px;
+  max-height: calc(100dvh - 24px);
+  overflow-y: auto;
+  padding: 28px 26px 24px;
+  border-radius: inherit;
+  background: var(--surface-strong);
+  box-shadow: 0 30px 80px rgba(22, 18, 58, 0.35);
+}
+
+.settings__title {
+  margin: 0;
+  font-size: clamp(24px, 4vw, 30px);
+  font-weight: 700;
+  outline: none; /* primeste focusul doar ca punct de plecare */
+}
+
+.settings__section { display: grid; gap: 10px; }
+.settings__label {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* optiunile: doua carduri unul langa altul */
+.settings__options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.settings__option {
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-control);
+  background: var(--surface);
+  color: var(--ink);
+  font: 600 15px var(--font);
+  cursor: pointer;
+  transition: border-color var(--dur-fast) ease, background var(--dur-fast) ease, transform var(--dur-fast) var(--ease-soft);
+}
+.settings__option:hover { border-color: var(--lilac); }
+.settings__option:active { transform: scale(0.97); }
+.settings__option:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
+/* optiunea aleasa */
+.settings__option[aria-pressed='true'] {
+  border-color: var(--violet);
+  background: var(--selected);
+}
+
+/* tema: o fasie de cer deasupra numelui */
+.settings__theme {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+  padding: 10px;
+  text-align: left;
+}
+.settings__preview {
+  position: relative;
+  width: 100%;
+  height: 56px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+/* cerul previzualizarii */
+.settings__theme[data-preview='light'] .settings__preview { background: linear-gradient(180deg, #8fb8e8, #c5d3f0 60%, #f1edf6); }
+.settings__theme[data-preview='midnight'] .settings__preview { background: linear-gradient(180deg, #0e0b26, #2b2468 60%, #4a3f8f); }
+/* un card mic pe cer, ca sa se vada cum arata cardurile in tema respectiva */
+.settings__preview span {
+  position: absolute;
+  left: 12px;
+  height: 8px;
+  border-radius: 4px;
+}
+.settings__preview span:first-child { top: 16px; width: 55%; }
+.settings__preview span:last-child { top: 30px; width: 35%; }
+.settings__theme[data-preview='light'] .settings__preview span { background: rgba(255, 255, 255, 0.85); }
+.settings__theme[data-preview='midnight'] .settings__preview span { background: rgba(162, 155, 254, 0.45); }
+
+/* profilul */
+.settings__profile {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+.settings__profile div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-control);
+  background: var(--surface);
+}
+.settings__profile dt { color: var(--ink-soft); font-size: 14px; }
+.settings__profile dd {
+  margin: 0;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* stergerea contului */
+.settings__delete {
+  justify-self: start;
+  padding: 11px 18px;
+  border: 1.5px solid currentColor;
+  border-radius: var(--radius-control);
+  background: none;
+  color: var(--danger);
+  font: 600 14px var(--font);
+  cursor: pointer;
+}
+.settings__delete:disabled { opacity: 0.5; cursor: default; }
+.settings__hint {
+  margin: -4px 0 0;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.settings__done {
+  justify-self: end;
+  min-width: 130px;
+  padding: 12px 22px;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: var(--action);
+  color: #fff;
+  font: 600 15px var(--font);
+  cursor: pointer;
+  transition: background var(--dur-fast) ease;
+}
+.settings__done:hover { background: var(--action-hover); }
+.settings__done:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .settings[open], .settings[open]::backdrop { animation: none; }
+  .settings__option { transition: none; }
+}

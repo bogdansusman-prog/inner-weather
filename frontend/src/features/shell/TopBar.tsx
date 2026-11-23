@@ -1,15 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
+import SettingsDialog from '../settings/SettingsDialog';
 import './topbar.css';
 
 type Props = {
   name: string | null;    // null cat timp nu stim inca cine e logat
+  email: string | null;
   onLogout: () => void;
 };
 
-export default function TopBar({ name, onLogout }: Props) {
+export default function TopBar({ name, email, onLogout }: Props) {
   const { t } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
 
   // meniul se inchide la Escape sau la click oriunde in afara lui
@@ -61,7 +64,15 @@ export default function TopBar({ name, onLogout }: Props) {
                 <strong>{name}</strong>
               </div>
             )}
-            <button type="button" className="topbar__item" role="menuitem">
+            <button
+              type="button"
+              className="topbar__item"
+              role="menuitem"
+              onClick={() => {
+                setMenuOpen(false);
+                setSettingsOpen(true);
+              }}
+            >
               {t('menu.settings')}
             </button>
             <button type="button" className="topbar__item" role="menuitem">
@@ -78,6 +89,8 @@ export default function TopBar({ name, onLogout }: Props) {
           </div>
         )}
       </div>
+
+      <SettingsDialog open={settingsOpen} onClose={() => setSettingsOpen(false)} name={name} email={email} />
     </header>
   );
 }

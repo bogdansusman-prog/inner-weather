@@ -1,0 +1,92 @@
+/* Tema Midnight purple: aplicatia de dupa login, noaptea.
+   Se aplica doar in .shell (intro-ul si login-ul raman cum sunt).
+   Mai intai schimbam culorile de baza (tokenurile), apoi ce e scris direct in componente. */
+
+:root[data-theme='midnight'] .shell {
+  --ink: #ece9ff;
+  --ink-soft: #b6b0dc;
+  --surface: rgba(255, 255, 255, 0.08);
+  --surface-strong: #1d1846;
+  --line: rgba(255, 255, 255, 0.16);
+  --selected: rgba(162, 155, 254, 0.18);
+  --action: #5b4bd6;
+  --action-hover: #6c5ce7;
+  --danger: #ff8fb4;
+  --danger-bg: rgba(232, 87, 138, 0.16);
+
+  /* sticla intunecata a cardurilor */
+  --glass: rgba(30, 24, 72, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.14);
+
+  background: #0e0b26;
+}
+
+/* cerurile: aceeasi zi, dar noaptea; stelele se vad peste tot */
+:root[data-theme='midnight'] .shell[data-page='checkin'] { --shell-a: #141036; --shell-b: #3a2c75; --shell-c: #6b4a8f; }
+:root[data-theme='midnight'] .shell[data-page='home']    { --shell-a: #0e0b26; --shell-b: #1f1a52; --shell-c: #3b3180; }
+:root[data-theme='midnight'] .shell[data-page='history'] { --shell-a: #140f30; --shell-b: #33246a; --shell-c: #5e3f7e; }
+:root[data-theme='midnight'] .shell[data-page='games']   { --shell-a: #0a0820; --shell-b: #1a1545; --shell-c: #2f2770; }
+:root[data-theme='midnight'] .shell__sky { animation: none; } /* fara trecerea din ziua intro-ului */
+:root[data-theme='midnight'] .shell__stars { opacity: 0.8; }
+
+/* cardurile si panourile de sticla */
+:root[data-theme='midnight'] .shell :is(
+  .home-page__today, .home-page__week, .history__card, .history__periods, .shell__chapters, .topbar__talk
+) {
+  border-color: var(--glass-border);
+  background: var(--glass);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.25);
+}
+:root[data-theme='midnight'] .shell .topbar__talk:hover { background: rgba(60, 50, 130, 0.7); }
+:root[data-theme='midnight'] .shell .topbar__menu {
+  border-color: var(--glass-border);
+  background: var(--surface-strong);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+}
+:root[data-theme='midnight'] .shell .topbar__item:hover { background: rgba(255, 255, 255, 0.08); }
+
+/* capitolele din dreapta */
+:root[data-theme='midnight'] .shell .shell__chapter { color: var(--ink-soft); }
+:root[data-theme='midnight'] .shell .shell__chapter:hover { background: rgba(255, 255, 255, 0.1); color: var(--ink); }
+:root[data-theme='midnight'] .shell .shell__chapter[aria-current='true'] { background: #ece9ff; color: #2b2468; }
+
+/* casutele mici din carduri */
+:root[data-theme='midnight'] .shell :is(.home-page__time, .history__tip, .history__arrow) {
+  border-color: var(--line);
+  background: var(--surface);
+}
+:root[data-theme='midnight'] .shell .history__arrow:hover:not(:disabled) { background: rgba(255, 255, 255, 0.16); }
+
+/* pe bulinele colorate (galben, verde, gri) textul ramane inchis; pe furtuna, alb */
+:root[data-theme='midnight'] .shell .history-cal__day { color: #25213f; }
+:root[data-theme='midnight'] .shell .history-cal__day[data-weather='STORMY'] { color: #fff; }
+:root[data-theme='midnight'] .shell .history-cal__day[data-weather='NONE'] {
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 0 0 1.5px var(--line);
+  color: var(--ink);
+}
+:root[data-theme='midnight'] .shell .history-cal__day[data-today='true'] { box-shadow: 0 0 0 3px rgba(162, 155, 254, 0.55); }
+:root[data-theme='midnight'] .shell .history-cal__count { background: #ece9ff; color: #25213f; }
+:root[data-theme='midnight'] .shell :is(.home-page__check, .thanks__check) { stroke: #25213f; }
+:root[data-theme='midnight'] .shell .home-page__day[data-weather='STORMY'] .home-page__check,
+:root[data-theme='midnight'] .shell .thanks[data-weather='STORMY'] .thanks__check { stroke: #fff; }
+:root[data-theme='midnight'] .shell .home-page__day[data-weather='NONE'] .home-page__dot { border-color: rgba(255, 255, 255, 0.25); }
+
+/* linia zilei si cercul din Istoric */
+:root[data-theme='midnight'] .shell .history-day__times::before { background: var(--line); }
+:root[data-theme='midnight'] .shell .history-day__time .history__dot { box-shadow: 0 0 0 3px #231d55; }
+:root[data-theme='midnight'] .shell .donut__track { stroke: rgba(255, 255, 255, 0.1); }
+
+/* harta starilor: cuvintele de pe colturi */
+:root[data-theme='midnight'] .shell .mood-map__word { background: rgba(255, 255, 255, 0.12); }
+:root[data-theme='midnight'] .shell .mood-map__word[data-active='true'] { background: var(--action); color: #fff; }
+
+/* ferestrele: check-in in plus si multumirea */
+:root[data-theme='midnight'] .shell .add-dialog__card { background: linear-gradient(180deg, #1d1846 0%, #2b2468 100%); }
+:root[data-theme='midnight'] .shell .add-dialog__cancel { border-color: var(--line); background: var(--surface); }
+:root[data-theme='midnight'] .shell .add-dialog__cancel:hover { background: rgba(255, 255, 255, 0.16); }
+:root[data-theme='midnight'] .shell .thanks__card {
+  border-color: var(--glass-border);
+  background: rgba(29, 24, 70, 0.88);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.4);
+}
