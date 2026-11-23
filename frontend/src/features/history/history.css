@@ -43,7 +43,7 @@
   cursor: pointer;
   transition: background var(--dur-fast) ease, color var(--dur-fast) ease;
 }
-.history__period:hover { background: rgba(255, 255, 255, 0.7); color: var(--ink); }
+@media (hover: hover) { .history__period:hover { background: rgba(255, 255, 255, 0.7); color: var(--ink); } }
 .history__period[aria-pressed='true'] { background: var(--action); color: #fff; font-weight: 600; }
 .history__period:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
 
@@ -97,7 +97,7 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.history__arrow:hover:not(:disabled) { background: #fff; }
+@media (hover: hover) { .history__arrow:hover:not(:disabled) { background: #fff; } }
 .history__arrow:active:not(:disabled) { transform: scale(0.94); }
 .history__arrow:disabled { opacity: 0.3; cursor: default; }
 .history__arrow:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
@@ -234,7 +234,7 @@
 .history-cal[data-period='week'] .history-cal__day { width: 48px; height: 48px; font-size: 16px; }
 .history-cal__day[data-weather='STORMY'] { color: #fff; }
 .history-cal__day[data-weather='NONE'] { box-shadow: inset 0 0 0 1.5px rgba(37, 33, 63, 0.14); }
-.history-cal__day:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(37, 33, 63, 0.16); }
+@media (hover: hover) { .history-cal__day:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(37, 33, 63, 0.16); } }
 .history-cal__day:active:not(:disabled) { transform: scale(0.94); }
 .history-cal__day:focus-visible { outline: 2px solid var(--violet); outline-offset: 2px; }
 /* azi: un inel in jur */

@@ -81,16 +81,16 @@
   cursor: pointer;
   transition: border-color var(--dur-fast) ease, background var(--dur-fast) ease, transform var(--dur-fast) var(--ease-soft);
 }
-.talk__button:hover { border-color: var(--lilac); }
+@media (hover: hover) { .talk__button:hover { border-color: var(--lilac); } }
 .talk__button:active { transform: scale(0.97); }
 .talk__button--main {
   border-color: transparent;
   background: var(--action);
   color: #fff;
 }
-.talk__button--main:hover { border-color: transparent; background: var(--action-hover); }
+@media (hover: hover) { .talk__button--main:hover { border-color: transparent; background: var(--action-hover); } }
 .talk__button--quiet { border-color: transparent; background: none; color: var(--ink-soft); }
-.talk__button--quiet:hover { border-color: transparent; color: var(--ink); }
+@media (hover: hover) { .talk__button--quiet:hover { border-color: transparent; color: var(--ink); } }
 
 /* mesajul catre cineva drag */
 .talk__label {
@@ -127,7 +127,7 @@
   font-weight: 700;
   text-decoration: none;
 }
-.talk__emergency:hover { text-decoration: underline; }
+@media (hover: hover) { .talk__emergency:hover { text-decoration: underline; } }
 
 /* liniile de sprijin: cate un card care suna la apasare */
 .talk__lines { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
@@ -144,7 +144,7 @@
   text-decoration: none;
   transition: border-color var(--dur-fast) ease;
 }
-.talk__line:hover { border-color: var(--lilac); }
+@media (hover: hover) { .talk__line:hover { border-color: var(--lilac); } }
 .talk__line strong { display: block; font-size: 15px; }
 .talk__about { color: var(--ink-soft); font-size: 13px; }
 .talk__number {
@@ -171,7 +171,7 @@
   text-underline-offset: 3px;
   cursor: pointer;
 }
-.talk__link:hover { color: var(--ink); }
+@media (hover: hover) { .talk__link:hover { color: var(--ink); } }
 .talk__directory { justify-self: start; }
 
 .talk :is(.talk__button, .talk__link, .talk__line, .talk__emergency):focus-visible {

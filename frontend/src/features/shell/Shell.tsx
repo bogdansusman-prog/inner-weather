@@ -10,6 +10,7 @@ import ThankYou from '../checkin/ThankYou';
 import HistoryPage from '../history/HistoryPage';
 import HomePage from '../home/HomePage';
 import Comet from './Comet';
+import SkyScene from './SkyScene';
 import TopBar from './TopBar';
 import { PAGE_MS, usePageNav } from './usePageNav';
 import './shell.css';
@@ -136,6 +137,8 @@ function ShellPages({ name, email, today, onCheckedIn, onLogout }: PagesProps) {
         <div className="shell__stars">
           <Stars />
         </div>
+        {/* soarele / luna, norii si vremea de azi */}
+        <SkyScene weather={today?.weather ?? null} />
       </div>
       <Comet page={index} />
 

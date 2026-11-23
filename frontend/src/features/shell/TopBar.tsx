@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLanguage } from '../../i18n/LanguageContext';
+import Avatar from '../profile/Avatar';
+import { avatarFromText, avatarToText, readSavedAvatars, writeSavedAvatars, type Avatar as AvatarValue } from '../profile/avatars';
 import SettingsDialog from '../settings/SettingsDialog';
 import TalkDialog from '../talk/TalkDialog';
 import './topbar.css';
@@ -15,6 +17,18 @@ export default function TopBar({ name, email, onLogout }: Props) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [talkOpen, setTalkOpen] = useState(false);
+  // avatarele salvate in browser, pe email (pana le tine backend-ul in profil)
+  const [savedAvatars, setSavedAvatars] = useState(readSavedAvatars);
+  const avatar = email ? avatarFromText(savedAvatars[email]) : null;
+
+  function changeAvatar(next: AvatarValue | null) {
+    if (!email) return;
+    const all = { ...savedAvatars };
+    if (next) all[email] = avatarToText(next);
+    else delete all[email];
+    setSavedAvatars(all);
+    writeSavedAvatars(all);
+  }
   const profileRef = useRef<HTMLDivElement>(null);
 
   // meniul se inchide la Escape sau la click oriunde in afara lui
@@ -54,7 +68,7 @@ export default function TopBar({ name, email, onLogout }: Props) {
           aria-expanded={menuOpen}
           onClick={() => setMenuOpen(!menuOpen)}
         >
-          {initial}
+          <Avatar avatar={avatar} initial={initial} />
         </button>
 
         {menuOpen && (
@@ -92,7 +106,14 @@ export default function TopBar({ name, email, onLogout }: Props) {
       </div>
 
       <TalkDialog open={talkOpen} onClose={() => setTalkOpen(false)} />
-      <SettingsDialog open={settingsOpen} onClose={() => setSettingsOpen(false)} name={name} email={email} />
+      <SettingsDialog
+        open={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+        name={name}
+        email={email}
+        avatar={avatar}
+        onAvatarChange={changeAvatar}
+      />
     </header>
   );
 }

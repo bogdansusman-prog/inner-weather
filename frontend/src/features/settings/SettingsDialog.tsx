@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { useLanguage, type Lang } from '../../i18n/LanguageContext';
 import type { TextKey } from '../../i18n/en';
+import type { Avatar } from '../profile/avatars';
+import AvatarPicker from '../profile/AvatarPicker';
 import { useTheme, type Theme } from '../../theme/ThemeContext';
 import './settings.css';
 
@@ -20,11 +22,13 @@ type Props = {
   onClose: () => void;
   name: string | null;
   email: string | null;
+  avatar: Avatar | null;
+  onAvatarChange: (avatar: Avatar | null) => void;
 };
 
 // Fereastra de setari: limba, tema, profilul si contul.
 // Limba si tema se schimba pe loc, fara buton de salvare.
-export default function SettingsDialog({ open, onClose, name, email }: Props) {
+export default function SettingsDialog({ open, onClose, name, email, avatar, onAvatarChange }: Props) {
   const { t, lang, setLang } = useLanguage();
   const { theme, setTheme } = useTheme();
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -105,6 +109,7 @@ export default function SettingsDialog({ open, onClose, name, email }: Props) {
         {/* profilul: deocamdata doar il aratam */}
         <section className="settings__section" aria-labelledby="settings-profile">
           <h3 className="settings__label" id="settings-profile">{t('settings.profile')}</h3>
+          <AvatarPicker avatar={avatar} initial={name ? name.trim().charAt(0).toUpperCase() : ''} onChange={onAvatarChange} />
           <dl className="settings__profile">
             <div>
               <dt>{t('settings.name')}</dt>

@@ -28,7 +28,7 @@
   cursor: pointer;
   transition: background var(--dur-fast) ease;
 }
-.topbar__talk:hover { background: rgba(255, 255, 255, 0.85); }
+@media (hover: hover) { .topbar__talk:hover { background: rgba(255, 255, 255, 0.85); } }
 
 /* avatarul: un cerc cu initiala */
 .topbar__profile { position: relative; }
@@ -38,13 +38,15 @@
   height: 40px;
   border: 2px solid rgba(255, 255, 255, 0.9);
   border-radius: 50%;
+  padding: 0;
+  overflow: hidden;
   background: var(--action);
   color: #fff;
   font: 600 16px var(--font);
   cursor: pointer;
   transition: transform var(--dur-fast) var(--ease-soft);
 }
-.topbar__avatar:hover { transform: scale(1.05); }
+@media (hover: hover) { .topbar__avatar:hover { transform: scale(1.05); } }
 .topbar__avatar[aria-expanded='true'] { box-shadow: 0 0 0 4px rgba(108, 92, 231, 0.25); }
 
 .topbar__talk:focus-visible,
@@ -93,7 +95,7 @@
   text-align: left;
   cursor: pointer;
 }
-.topbar__item:hover { background: rgba(108, 92, 231, 0.08); }
+@media (hover: hover) { .topbar__item:hover { background: rgba(108, 92, 231, 0.08); } }
 .topbar__item--danger { color: var(--danger); }
 
 @media (prefers-reduced-motion: reduce) {

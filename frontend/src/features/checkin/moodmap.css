@@ -20,9 +20,11 @@
   background: rgba(255, 255, 255, 0.06);
   transition: background var(--dur-fast) ease, border-color var(--dur-fast) ease;
 }
-.mood-map[data-interactive='true']:hover::before {
-  border-color: rgba(255, 255, 255, 0.9);
-  background: rgba(255, 255, 255, 0.14);
+@media (hover: hover) {
+  .mood-map[data-interactive='true']:hover::before {
+    border-color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.14);
+  }
 }
 .mood-map:focus-visible { outline: 3px solid var(--violet); outline-offset: 6px; }
 

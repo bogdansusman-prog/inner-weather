@@ -78,13 +78,13 @@
   background: rgba(255, 255, 255, 0.7);
   color: var(--ink);
 }
-.add-dialog__cancel:hover { background: #fff; }
+@media (hover: hover) { .add-dialog__cancel:hover { background: #fff; } }
 .add-dialog__save {
   border: 0;
   background: var(--action);
   color: #fff;
 }
-.add-dialog__save:hover:not(:disabled) { background: var(--action-hover); }
+@media (hover: hover) { .add-dialog__save:hover:not(:disabled) { background: var(--action-hover); } }
 .add-dialog__save:disabled { opacity: 0.45; cursor: default; }
 .add-dialog__cancel:focus-visible,
 .add-dialog__save:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }

@@ -1,0 +1,38 @@
+/* Cercul de profil (bara de sus si setarile). Marimea vine de la parinte. */
+.avatar {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--avatar-bg);
+  color: var(--avatar-ink);
+  font: 600 1em var(--font);
+  overflow: hidden;
+  transition: background var(--dur-base) ease, color var(--dur-base) ease;
+}
+/* personajele: Ax umple aproape tot cercul, bufnita il umple de tot (are fundalul ei) */
+.avatar__art { width: 92%; height: 92%; }
+.avatar__img { width: 100%; height: 100%; object-fit: cover; }
+.avatar__icon {
+  width: 58%;
+  height: 58%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* culorile: pe cele deschise desenul e inchis, pe cele inchise e alb */
+[data-color='initial'] { --avatar-bg: var(--action); --avatar-ink: #fff; }
+[data-color='violet']  { --avatar-bg: #2b2468; --avatar-ink: #fff; }
+[data-color='lilac']   { --avatar-bg: #a29bfe; --avatar-ink: #25213f; }
+[data-color='rose']    { --avatar-bg: #e8578a; --avatar-ink: #fff; }
+[data-color='mint']    { --avatar-bg: #7ddcc0; --avatar-ink: #25213f; }
+[data-color='gold']    { --avatar-bg: #ffc857; --avatar-ink: #25213f; }
+[data-color='sky']     { --avatar-bg: #8fb8e8; --avatar-ink: #25213f; }
+
+@media (prefers-reduced-motion: reduce) {
+  .avatar { transition: none; }
+}
