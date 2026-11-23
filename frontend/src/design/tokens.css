@@ -18,6 +18,12 @@
   --gold: #ffc857;
   --mint: #3dc1a3;
 
+  /* Suprafete (cardurile de sticla); tema Midnight le schimba */
+  --surface: rgba(255, 255, 255, 0.7);       /* casute din interiorul cardurilor */
+  --surface-strong: #f6f3fb;                 /* fundalul ferestrelor (setari) */
+  --line: rgba(37, 33, 63, 0.12);            /* contururi subtiri */
+  --selected: rgba(108, 92, 231, 0.1);       /* optiunea aleasa */
+
   /* Actiuni si stari */
   --action: #2b2468;        /* butonul principal */
   --action-hover: #3b3486;

@@ -44,6 +44,7 @@ type Props = {
 
 export default function Shell({ onLogout }: Props) {
   const [name, setName] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
   // check-in-ul zilnic: undefined = inca intrebam serverul, null = nu s-a facut azi
   const [today, setToday] = useState<CheckIn | null | undefined>(undefined);
   // creste la fiecare miez de noapte, ca sa intrebam din nou serverul
@@ -52,7 +53,10 @@ export default function Shell({ onLogout }: Props) {
   // numele pentru avatar si meniu; daca token-ul a expirat, iesim din cont
   useEffect(() => {
     getMe()
-      .then((me) => setName(me.name))
+      .then((me) => {
+        setName(me.name);
+        setEmail(me.email);
+      })
       .catch((err) => {
         if (err instanceof ApiError && err.status === 401) onLogout();
       });
@@ -87,23 +91,24 @@ export default function Shell({ onLogout }: Props) {
     return (
       <div className="shell" data-page="home">
         <div className="shell__sky" aria-hidden="true" />
-        <TopBar name={name} onLogout={onLogout} />
+        <TopBar name={name} email={email} onLogout={onLogout} />
       </div>
     );
   }
 
-  return <ShellPages name={name} today={today} onCheckedIn={setToday} onLogout={onLogout} />;
+  return <ShellPages name={name} email={email} today={today} onCheckedIn={setToday} onLogout={onLogout} />;
 }
 
 type PagesProps = {
   name: string | null;
+  email: string | null;
   today: CheckIn | null;
   onCheckedIn: (checkIn: CheckIn) => void;
   onLogout: () => void;
 };
 
 // Paginile propriu-zise. Pornim pe Check-in doar daca nu s-a facut azi.
-function ShellPages({ name, today, onCheckedIn, onLogout }: PagesProps) {
+function ShellPages({ name, email, today, onCheckedIn, onLogout }: PagesProps) {
   const { t } = useLanguage();
   const { index, goTo, handlers } = usePageNav(PAGES.length, today ? HOME : CHECKIN);
   // vremea check-in-ului zilnic abia salvat: cat timp e setata, aratam multumirea
@@ -134,7 +139,7 @@ function ShellPages({ name, today, onCheckedIn, onLogout }: PagesProps) {
       </div>
       <Comet page={index} />
 
-      <TopBar name={name} onLogout={onLogout} />
+      <TopBar name={name} email={email} onLogout={onLogout} />
 
       <ul className="shell__chapters">
         {PAGES.map((page, i) => (
