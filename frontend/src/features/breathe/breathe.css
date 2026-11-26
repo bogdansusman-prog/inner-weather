@@ -1,0 +1,198 @@
+/* Pagina de respiratie: culori calme si nesaturate, nimic care palpaie. */
+.breathe {
+  width: min(560px, 100%);
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+  text-align: center;
+}
+.breathe__title {
+  margin: 0;
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 700;
+}
+.breathe__intro {
+  margin: -6px 0 10px;
+  color: rgba(236, 233, 255, 0.75);
+  font-size: 16px;
+}
+
+/* cele doua moduri */
+.breathe__modes {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+.breathe__mode {
+  display: grid;
+  gap: 6px;
+  padding: 22px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-card);
+  background: rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  color: #f3f0f8;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--dur-fast) ease, border-color var(--dur-fast) ease, transform var(--dur-fast) var(--ease-soft);
+}
+@media (hover: hover) { .breathe__mode:hover { background: rgba(255, 255, 255, 0.13); border-color: rgba(207, 200, 245, 0.5); } }
+.breathe__mode:active { transform: scale(0.98); }
+.breathe__mode:focus-visible { outline: 2px solid #cfc8f5; outline-offset: 3px; }
+.breathe__mode-title { font: 700 18px var(--font); }
+.breathe__mode-hint { color: rgba(236, 233, 255, 0.7); font: 400 14px var(--font); }
+
+.breathe__safety {
+  max-width: 440px;
+  margin: 8px 0 0;
+  color: rgba(236, 233, 255, 0.6);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ---------- Sesiunea ---------- */
+.breath {
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+}
+.breath__stage {
+  --size: min(300px, 62vw, 44dvh);
+  position: relative;
+  width: var(--size);
+  height: var(--size);
+  display: grid;
+  place-items: center;
+}
+/* inelul subtire: cat de mare ajunge cercul la capatul inspirului */
+.breath__ring {
+  position: absolute;
+  inset: 0;
+  border: 1.5px solid rgba(207, 200, 245, 0.28);
+  border-radius: 50%;
+}
+/* cercul care respira: lila-albastrui, moale, cu o lumina blanda */
+.breath__circle {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 42% 38%, #e9e5fb 0%, #c4bdee 40%, #9aa9d8 100%);
+  box-shadow: 0 0 60px 10px rgba(180, 172, 230, 0.35);
+  opacity: 0.9;
+}
+.breath__phase {
+  position: relative;
+  margin: 0;
+  color: #2b2550;
+  font: 700 clamp(18px, 4vw, 24px) var(--font);
+}
+.breath__count {
+  position: absolute;
+  bottom: 30%;
+  margin: 0;
+  color: rgba(43, 37, 80, 0.6);
+  font: 600 16px var(--font);
+  font-variant-numeric: tabular-nums;
+}
+.breath__left {
+  margin: 0;
+  color: rgba(236, 233, 255, 0.7);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ritmul: trei pastile */
+.breath__pace {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.06);
+}
+.breath__chip {
+  min-height: 36px;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: none;
+  color: rgba(236, 233, 255, 0.8);
+  font: 500 14px var(--font);
+  cursor: pointer;
+}
+.breath__chip[aria-pressed='true'] { background: #ece9ff; color: #2b2468; font-weight: 600; }
+.breath__chip:focus-visible { outline: 2px solid #cfc8f5; outline-offset: 2px; }
+
+.breath__dizzy {
+  margin: 0;
+  color: rgba(236, 233, 255, 0.6);
+  font-size: 13px;
+}
+
+.breath__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 18px;
+}
+.breath__button {
+  min-width: 130px;
+  padding: 12px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: var(--radius-control);
+  background: rgba(255, 255, 255, 0.1);
+  color: #f3f0f8;
+  font: 600 15px var(--font);
+  cursor: pointer;
+}
+@media (hover: hover) { .breath__button:hover { background: rgba(255, 255, 255, 0.16); } }
+.breath__link {
+  padding: 6px 0;
+  border: 0;
+  background: none;
+  color: rgba(236, 233, 255, 0.8);
+  font: 500 14px var(--font);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.breath__button:focus-visible,
+.breath__link:focus-visible { outline: 2px solid #cfc8f5; outline-offset: 3px; }
+
+/* ---------- Finalul ---------- */
+.breathe__done {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+  padding-top: 90px;
+}
+.breathe__done-glow {
+  position: absolute;
+  top: 0;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 42% 38%, #e9e5fb, #9aa9d8);
+  box-shadow: 0 0 50px 12px rgba(180, 172, 230, 0.35);
+  animation: breathe-settle 1.2s var(--ease-soft) both;
+}
+@keyframes breathe-settle { from { scale: 1.6; opacity: 0; } }
+
+/* fara miscare: cercul nu mai creste, doar lumina se schimba incet */
+@media (prefers-reduced-motion: reduce) {
+  .breath__circle { scale: 0.8 !important; transition: opacity 1s ease; }
+  .breath__stage[data-phase='in'] .breath__circle { opacity: 1; }
+  .breath__stage[data-phase='out'] .breath__circle { opacity: 0.55; }
+  .breathe__done-glow { animation: none; }
+}
+
+/* in timpul sesiunii cerul se linisteste: cometa si stelele cazatoare dispar, ca sa nu distraga */
+.shell:has(.breath) :is(.shell__comet, .scene__meteor) {
+  opacity: 0 !important;
+  transition: opacity 1s ease;
+}
