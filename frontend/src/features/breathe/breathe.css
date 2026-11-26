@@ -17,6 +17,17 @@
   font-size: 16px;
 }
 
+/* titlul fiecarui grup de instrumente */
+.breathe__group {
+  justify-self: start;
+  margin: 6px 0 -4px;
+  color: rgba(236, 233, 255, 0.7);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 /* cele doua moduri */
 .breathe__modes {
   width: 100%;
@@ -191,8 +202,8 @@
   .breathe__done-glow { animation: none; }
 }
 
-/* in timpul sesiunii cerul se linisteste: cometa si stelele cazatoare dispar, ca sa nu distraga */
-.shell:has(.breath) :is(.shell__comet, .scene__meteor) {
+/* in timpul sesiunii (si in ceata) cerul se linisteste: cometa si stelele cazatoare dispar, ca sa nu distraga */
+.shell:has(.breath, .fog) :is(.shell__comet, .scene__meteor) {
   opacity: 0 !important;
   transition: opacity 1s ease;
 }
